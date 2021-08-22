@@ -3,19 +3,25 @@ package com.proyectoipc.conexionSQL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import com.mysql.jdbc.Driver;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author elvis_agui
  */
 public class Conexion {
 
-    public String URL = "jdbc:mysql://localhost:3306/Muebleria";
-    public String USER = "elvis-admin";
-    public String PASS = "4056ELVIS";
-    public Connection conexion;
+    public static String URL = "jdbc:mysql://localhost:3306/Muebleria";
+    public static String USER = "elvis-admin";
+    public static String PASS = "4056ELVIS";
+    public static Connection conexion = null;
 
     public Conexion() {
+
+    }
+
+    public static Connection getConexion() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection(URL, USER, PASS);
@@ -23,13 +29,20 @@ public class Conexion {
             System.err.println("erro en conexion sql");
         } catch (ClassNotFoundException ex) {
             System.err.println("erro en conexion calas name");
-            
-        }
-    }
 
-    public Connection getConexion() {
+        }
         return conexion;
 
     }
     
+    public static void getCloseConexion(){
+        if (conexion != null) {
+            try {
+                conexion.close();
+            } catch (SQLException ex) {
+            }
+            
+        }
+    }
+
 }
