@@ -11,26 +11,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
-        <title>JSP Page</title>
+        <title>Area Fabrica</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Area Fabrica</a>
+                        <a class="nav-link active" aria-current="page" href="#">FABRICA</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="Controlador?accion=Eliminar" target="myFrame">Crear Piezas</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=Crear&accion=listar" target="myFrame">Area Piezas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">Eliminar Piezas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">Modificar Piezas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">Ensamblar Mueble</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=Ensamble&accion=ListarM" target="myFrame">Ensamblar Mueble</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-light" href="#">En Venta</a>
@@ -45,13 +39,13 @@
             </div>
             <div class="dropdown">
                 <form action="Validar" method="post">
-                    <button name="btnIngresar" value="Salir" type="submit" class="btn btn-primary">Cerrar sesion ${usuario.getNombre()}</button>
+                    <button name="btnIngresar" value="Salir" type="submit" class="btn  btn-success">Cerrar sesion ${usuario.getNombre()}</button>
                 </form>
             </div>
 
         </nav>
-        <div class="m-4" style="height: 500px;">
-            <iframe name="myFrame" style="border:5px dotted red; height: 100%; width: 100%;"></iframe>
+        <div class="m-1" style="height: 540px;">
+            <iframe name="myFrame" style="border:8px dotted green; height: 100%; width: 100%;"></iframe>
         </div>
                 
                 

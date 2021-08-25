@@ -1,5 +1,9 @@
 /home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/conexionSQL/Conexion.java
+/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/CosultDBaux.java
+/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/Pieza.java
 /home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/mimuebleria/Controlador.java
 /home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/mimuebleria/Validar.java
+/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/Entidades/Pieza_Muble.java
+/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/ConsulDB.java
 /home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/Usuario.java
-/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/UsuarioDB.java
+/home/elvis_agui/NetBeansProjects/MiMuebleria/src/main/java/com/proyectoipc/modelo/Mueble.java

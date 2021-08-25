@@ -6,7 +6,7 @@
 package com.proyectoipc.mimuebleria;
 
 import com.proyectoipc.modelo.Usuario;
-import com.proyectoipc.modelo.UsuarioDB;
+import com.proyectoipc.modelo.ConsulDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Validar extends HttpServlet {
 
-    UsuarioDB usDB = new UsuarioDB();
+    ConsulDB usDB = new ConsulDB();
     Usuario us = new Usuario();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -45,11 +45,11 @@ public class Validar extends HttpServlet {
             if (us.getNombre() != null && us.getActivo() == 1) {
                 if (us.getRol() == 1) {
                     request.setAttribute("usuario", us);
-                    request.getRequestDispatcher("Controlador?accion=fabrica").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=fabrica").forward(request, response);
                 } else if (us.getRol() == 2) {
-                    request.getRequestDispatcher("Controlador?accion=Ventas").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Ventas").forward(request, response);
                 } else if (us.getRol() == 3) {
-                    request.getRequestDispatcher("Controlador?accion=Administaracion").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Administaracion").forward(request, response);
                 } else {
                     response.sendRedirect("sesion/index.jsp");
                 }
