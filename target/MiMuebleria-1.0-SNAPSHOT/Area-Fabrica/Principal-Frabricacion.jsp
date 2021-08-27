@@ -27,7 +27,7 @@
                         <a class="btn btn-outline-light" href="Controlador?menu=Ensamble&accion=ListarM" target="myFrame">Ensamblar Mueble</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">En Venta</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=Registro&accion=lisatSala" target="myFrame">En Venta</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-light" href="#">Info Piezas</a>

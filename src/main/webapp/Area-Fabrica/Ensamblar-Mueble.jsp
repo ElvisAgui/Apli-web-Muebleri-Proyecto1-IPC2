@@ -3,6 +3,7 @@
     Created on : 22/08/2021, 17:13:14
     Author     : elvis_agui
 --%>
+<%@page import="java.time.LocalDate"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,7 +19,6 @@
             <div class="card-body" style="background-color:#6ce7b2">
                 <h3 class="text-center">Apartado de Ensamble piezas a Muebles</h3>
             </div>
-
         </div>
         <div class="d-flex"> 
             <div class="card col-sm-6" style="background-color:#5b7469">
@@ -66,7 +66,6 @@
                                     <td>${piez.getCosto()}</td>
                                     <td>
                                         <a class="btn btn-warning" href="Controlador?menu=Ensamble&accion=AgregarP&nomPi=${piez.getNombre()}">Ensamblar</a>
-
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -107,7 +106,14 @@
                             <input type="submit" name="accion" value="Confirmar" class="btn btn-info">
                         </form>
                     </div>
-
+                    <form action="Controlador?menu=Ensamble" method="POST">
+                        <div class="form-group">
+                            <br>
+                            <br>
+                            <label>Refrescar Tablas  --(Ya no Agregaras mas Piezas?)</label>
+                            <input type="submit" name="accion" value="Refrescar" class="btn btn-warning">
+                        </div>
+                    </form>
 
                 </div>
             </div>
@@ -120,21 +126,25 @@
         <div class="d-flex"> 
             <div class="card col-sm-6" style="background-color:#5b7469">
                 <div class="card-body">
-                    <h3 class="text-center">Piezas Agotadas</h3>
+                    <h3 class="text-center">Registrar Ensamble</h3>
                     <table class="table table-dark table-hover text-center">
                         <thead>
                             <tr>
                                 <th>NOMBRE</th>
-                                <th>CANTIDAD</th>
+                                <th>PRECIO VENTA</th>
                                 <th>COSTO</th>
+                                <th>OPCIONES</th>
                             </tr>
                         </thead>
                         <tbody> 
-                            <c:forEach var="piez" items="${piezasAgot}">
+                            <c:forEach var="muebleE" items="${mueblesEnsam}">
                                 <tr>
-                                    <td>${piez.getNombre()}</td>
-                                    <td>${piez.getCantidad()}</td>
-                                    <td>${piez.getCosto()}</td>
+                                    <td>${muebleE.getNombre()}</td>
+                                    <td>${muebleE.getPrecioVenta()}</td>
+                                    <td>${muebleE.getCosto()}</td>
+                                    <td>
+                                        <a class="btn btn-warning" href="Controlador?menu=Ensamble&accion=mubleEnsamblado&nomEns=${muebleE.getNombre()}">Ensamblar</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -143,8 +153,42 @@
             </div>
             <div class="card col-sm-6" style="background-color:#5b7469">
                 <div class="card-body">
+                    <div class="card-body" style="background-color:gold">
+                        <h3 class="text-center">Confirmacion</h3>
+                    </div>
+                    <table class="table table-dark table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>MUEBLE</th>
+                                <th>FECHA</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr>
+                                <td>${muebleEnsable.getMueble()}</td>
+                                <td>${fecha}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-body" style="background-color:gold">
+                        <h3 class="text-center">CONFIRMACION PARA MAYOR SEGUIRDAD</h3>
+                        <form action="Controlador?menu=Ensamble" method="POST" class="text-center">
+                            <div class="form-group">
+                                <label>ingrese su contraseña</label>
+                                <br>
+                                <input type="password" name="ensamblador" class="from-control">
+                            </div>
+                            <br>
+                            <input type="submit" name="accion" value="Registrar" class="btn btn-info">
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
                     <div class="card-body"> 
-                        <h3 class="text-center">Piezas Agotadas</h3>
+                        <h3 class="text-center">PIEZAS AGOTADAS</h3>
                         <table class="table table-dark table-hover text-center">
                             <thead>
                                 <tr>

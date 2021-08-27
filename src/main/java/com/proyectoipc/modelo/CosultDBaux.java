@@ -1,5 +1,6 @@
 package com.proyectoipc.modelo;
 
+import com.proyectoipc.Entidades.Ensamble;
 import com.proyectoipc.Entidades.Pieza_Muble;
 import com.proyectoipc.conexionSQL.Conexion;
 import java.sql.Connection;
@@ -53,13 +54,30 @@ public class CosultDBaux {
                         suma = +(cantidad * precioP(nombPieza));
                     }
                 }
-                if (mueble.getCosto() == 0.00) {
+                if (mueble.getCosto() == 0) {
                     mueble.setCosto(suma);
+                    actualizarMueble(mueble);
                 }
             }
         } catch (Exception e) {
             System.out.println("actualizar costo Mueble");
-        } 
+        }
+    }
+
+    public void actualizarMueble(Mueble mueble) {
+        try {
+            String consulta = "UPDATE mueble SET costo=? WHERE nombre=?";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setDouble(1, mueble.getCosto());
+            query.setString(2, mueble.getNombre());
+            query.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Error en Actualizar pieza");
+        } finally {
+            cierre();
+        }
+
     }
 
     private double precioP(String nomPi) {
@@ -103,6 +121,49 @@ public class CosultDBaux {
         return lista;
     }
 
+    public List listaMueblesEnsamble() {
+        String consulta = "SELECT * FROM mueble WHERE costo>0.00";
+        List<Mueble> lista = new ArrayList<>();
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            result = query.executeQuery();
+            while (result.next()) {
+                Mueble mueble = new Mueble();
+                mueble.setNombre(result.getString("nombre"));
+                mueble.setPrecioVenta(result.getDouble("precio_venta"));
+                mueble.setCosto(result.getDouble("costo"));
+                lista.add(mueble);
+            }
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            cierre();
+        }
+
+        return lista;
+    }
+
+    public boolean existeUsuario(String nombre) {
+        boolean existe = false;
+        String consulta = "SELECT contraseña FROM usuario WHERE contraseña=?";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, nombre);
+            result = query.executeQuery();
+            while (result.next()) {
+                existe = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            cierre();
+        }
+
+        return existe;
+    }
+
     public List listarMueble() {
         String consulta = "SELECT * FROM mueble WHERE costo=0.00";
         List<Mueble> lista = new ArrayList<>();
@@ -124,6 +185,52 @@ public class CosultDBaux {
         }
 
         return lista;
+    }
+    
+    public List piezasMueble(String nombre){
+       String consulta = "SELECT * FROM pieza_mueble WHERE nombre_mueble=?";
+        List<Pieza_Muble> lista = new ArrayList<>(); 
+        
+        return lista;
+    }
+    
+    public void guardarEnsamble(Ensamble ensamble){
+        String consulta = "INSERT INTO ensamble(id, mueble, ensamblador, Fecha, ganancia, en_sala) VALUES (?,?,?,?,?,?)";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1,  ""+ensamble.getId());
+            query.setString(2, ensamble.getMueble());
+            query.setString(3, ensamble.getEnsamblador());
+            query.setDate(4, ensamble.getFecha());
+            query.setDouble(5, ensamble.getGanancia());
+            query.setBoolean(6, ensamble.getEnSala());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("error en listar inser ENSAMBLE "+ e.getMessage());
+        } finally {
+            cierre();
+        }
+    }
+
+    public double calcGanancia(String nombreMu) {
+        double ganancia = 0;
+        String consulta = "SELECT * FROM mueble WHERE nombre=?";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, nombreMu);
+            result = query.executeQuery();
+            while (result.next()) {
+               ganancia=(result.getDouble("precio_venta")-result.getDouble("costo"));
+            }
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            cierre();
+        }
+        return ganancia;
+
     }
 
     private void cierre() {

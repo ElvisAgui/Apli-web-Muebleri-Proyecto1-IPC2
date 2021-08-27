@@ -5,6 +5,7 @@
  */
 package com.proyectoipc.mimuebleria;
 
+import com.proyectoipc.Entidades.Ensamble;
 import com.proyectoipc.modelo.ConsulDB;
 import com.proyectoipc.modelo.CosultDBaux;
 import com.proyectoipc.modelo.Pieza;
@@ -12,6 +13,10 @@ import com.proyectoipc.Entidades.Pieza_Muble;
 import com.proyectoipc.modelo.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Controlador extends HttpServlet {
 
+    LocalDate fecha;
     Pieza pieza = new Pieza();
     CosultDBaux dbAux = new CosultDBaux();
     ConsulDB consul = new ConsulDB();
@@ -32,6 +38,8 @@ public class Controlador extends HttpServlet {
     String nombM;
     Pieza_Muble piMue = new Pieza_Muble();
     Usuario usuario;
+    String nombreus;
+    Ensamble mEnsambel = new Ensamble();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -93,9 +101,12 @@ public class Controlador extends HttpServlet {
                     List listAgotada = consul.listaAgotada();
                     request.setAttribute("piezasAgot", listAgotada);
                     List listM = dbAux.listarMueble();
+                    List listMEn = dbAux.listaMueblesEnsamble();
                     List lista = consul.listar();
                     request.setAttribute("piezas", lista);
+                    request.setAttribute("mueblesEnsam", listMEn);
                     request.setAttribute("muebles", listM);
+                    request.setAttribute("usuario", nombreus);
                     break;
                 case "AgregarP":
                     piMue.setNombreP(request.getParameter("nomPi"));
@@ -117,6 +128,28 @@ public class Controlador extends HttpServlet {
                     request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
                     break;
                 case "Refrescar":
+                    dbAux.EnsamblarMueble();
+                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                    break;
+                case "mubleEnsamblado":
+                    LocalDateTime localDate = LocalDateTime.now();
+                    DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                    mEnsambel.setMueble(request.getParameter("nomEns"));
+                    request.setAttribute("muebleEnsable", mEnsambel);
+                    request.setAttribute("fecha", ad.format(localDate));
+                    mEnsambel.setFecha(Ensamble.getFecha(ad.format(localDate)));
+                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                    break;
+                case "Registrar":
+                    if (dbAux.existeUsuario(request.getParameter("ensamblador"))) {
+                        mEnsambel.setEnsamblador(request.getParameter("ensamblador"));
+                        mEnsambel.setId(Ensamble.id());
+                        mEnsambel.setGanancia(dbAux.calcGanancia(mEnsambel.getMueble()));
+                        mEnsambel.setEnSala(false);
+                        dbAux.guardarEnsamble(mEnsambel);
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+
+                    }
 
                     request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
 
@@ -124,12 +157,25 @@ public class Controlador extends HttpServlet {
                 default:
                     ///erorro
                     break;
-
             }
-
             request.getRequestDispatcher("Area-Fabrica/Ensamblar-Mueble.jsp").forward(request, response);
+        } else if (menu.equals("Registro")) {
+            switch (accion) {
+                case "lisatSala":
+                    List Ensamble = consul.listaParaVenta();
+                    request.setAttribute("listaParaVenta", Ensamble);
+                    break;
+                case "resigstroSala":
+                    consul.enSala("" + request.getParameter("ensala"));
+                    request.getRequestDispatcher("Controlador?menu=Registro&accion=lisatSala").forward(request, response);
+
+                    break;
+            }
+            request.getRequestDispatcher("Area-Fabrica/Sala-Venta.jsp").forward(request, response);
+
         } else {
             response.sendRedirect("sesion/index.jsp");
+
         }
 
     }
