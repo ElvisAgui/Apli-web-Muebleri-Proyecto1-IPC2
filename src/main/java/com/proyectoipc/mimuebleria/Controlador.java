@@ -57,7 +57,7 @@ public class Controlador extends HttpServlet {
         } else if (menu.equals("Crear")) {
             switch (accion) {
                 case "listar":
-                    List lista = consul.listar();
+                    List lista = consul.listar(false, false);
                     List listAgotada = consul.listaAgotada();
                     request.setAttribute("piezas", lista);
                     request.setAttribute("piezasAgot", listAgotada);
@@ -100,9 +100,9 @@ public class Controlador extends HttpServlet {
                 case "ListarM":
                     List listAgotada = consul.listaAgotada();
                     request.setAttribute("piezasAgot", listAgotada);
-                    List listM = dbAux.listarMueble();
-                    List listMEn = dbAux.listaMueblesEnsamble();
-                    List lista = consul.listar();
+                    List listM = dbAux.listarMueble(false);
+                    List listMEn = dbAux.listarMueble(true);
+                    List lista = consul.listar(false, false);
                     request.setAttribute("piezas", lista);
                     request.setAttribute("mueblesEnsam", listMEn);
                     request.setAttribute("muebles", listM);
@@ -168,10 +168,44 @@ public class Controlador extends HttpServlet {
                 case "resigstroSala":
                     consul.enSala("" + request.getParameter("ensala"));
                     request.getRequestDispatcher("Controlador?menu=Registro&accion=lisatSala").forward(request, response);
-
                     break;
             }
             request.getRequestDispatcher("Area-Fabrica/Sala-Venta.jsp").forward(request, response);
+
+        } else if (menu.equals("infoPiezas")) {
+            List lista;
+            switch (accion) {
+                case "listaP":
+                    lista = consul.listar(false, true);
+                    request.setAttribute("piezas", lista);
+                    break;
+                case "ordenAsen":
+                    lista = consul.listar(true, true);
+                    request.setAttribute("piezas", lista);
+                    break;
+                case "ordenDes":
+                    lista = consul.listar(true, false);
+                    request.setAttribute("piezas", lista);
+                    break;
+            }
+            request.getRequestDispatcher("Area-Fabrica/Info-Piezas.jsp").forward(request, response);
+        } else if (menu.equals("infoMueble")) {
+            List lista;
+            switch (accion) {
+                case "listaM":
+                   lista = consul.infoMCreados(false, true);
+                   request.setAttribute("infoMue", lista);
+                    break;
+                case "ordenAsen":
+                    lista = consul.infoMCreados(true, true);
+                    request.setAttribute("infoMue", lista);
+                    break;
+                case "ordenDes":
+                    lista = consul.infoMCreados(true, false);
+                    request.setAttribute("infoMue", lista);
+                    break;
+            }
+            request.getRequestDispatcher("Area-Fabrica/Info-Mueble.jsp").forward(request, response);
 
         } else {
             response.sendRedirect("sesion/index.jsp");

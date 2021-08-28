@@ -30,10 +30,10 @@
                         <a class="btn btn-outline-light" href="Controlador?menu=Registro&accion=lisatSala" target="myFrame">En Venta</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">Info Piezas</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=infoPiezas&accion=listaP" target="myFrame">Info Piezas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="#">Info Muebles</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=infoMueble&accion=listaM" target="myFrame">Info Muebles</a>
                     </li>
                 </ul>
             </div>

@@ -44,7 +44,7 @@ public class CosultDBaux {
         try {
             List<Mueble> lista;
             List<Pieza_Muble> listaMuP;
-            lista = listarMueble();
+            lista = listarMueble(false);
             listaMuP = mueble_Pieza();
             for (Mueble mueble : lista) {
                 for (Pieza_Muble pieza_Muble : listaMuP) {
@@ -121,29 +121,6 @@ public class CosultDBaux {
         return lista;
     }
 
-    public List listaMueblesEnsamble() {
-        String consulta = "SELECT * FROM mueble WHERE costo>0.00";
-        List<Mueble> lista = new ArrayList<>();
-        try {
-            conexion = Conexion.getConexion();
-            query = conexion.prepareStatement(consulta);
-            result = query.executeQuery();
-            while (result.next()) {
-                Mueble mueble = new Mueble();
-                mueble.setNombre(result.getString("nombre"));
-                mueble.setPrecioVenta(result.getDouble("precio_venta"));
-                mueble.setCosto(result.getDouble("costo"));
-                lista.add(mueble);
-            }
-        } catch (SQLException e) {
-            System.out.println("error en listar priductos");
-        } finally {
-            cierre();
-        }
-
-        return lista;
-    }
-
     public boolean existeUsuario(String nombre) {
         boolean existe = false;
         String consulta = "SELECT contraseña FROM usuario WHERE contraseña=?";
@@ -164,8 +141,12 @@ public class CosultDBaux {
         return existe;
     }
 
-    public List listarMueble() {
+    public List listarMueble(boolean conCosto) {
+        String consultaCosto = "SELECT * FROM mueble WHERE costo>0.00";
         String consulta = "SELECT * FROM mueble WHERE costo=0.00";
+        if (conCosto) {
+            consulta = consultaCosto;
+        }
         List<Mueble> lista = new ArrayList<>();
         try {
             conexion = Conexion.getConexion();
@@ -186,20 +167,20 @@ public class CosultDBaux {
 
         return lista;
     }
-    
-    public List piezasMueble(String nombre){
-       String consulta = "SELECT * FROM pieza_mueble WHERE nombre_mueble=?";
-        List<Pieza_Muble> lista = new ArrayList<>(); 
-        
+
+    public List piezasMueble(String nombre) {
+        String consulta = "SELECT * FROM pieza_mueble WHERE nombre_mueble=?";
+        List<Pieza_Muble> lista = new ArrayList<>();
+
         return lista;
     }
-    
-    public void guardarEnsamble(Ensamble ensamble){
+
+    public void guardarEnsamble(Ensamble ensamble) {
         String consulta = "INSERT INTO ensamble(id, mueble, ensamblador, Fecha, ganancia, en_sala) VALUES (?,?,?,?,?,?)";
         try {
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
-            query.setString(1,  ""+ensamble.getId());
+            query.setString(1, "" + ensamble.getId());
             query.setString(2, ensamble.getMueble());
             query.setString(3, ensamble.getEnsamblador());
             query.setDate(4, ensamble.getFecha());
@@ -207,7 +188,7 @@ public class CosultDBaux {
             query.setBoolean(6, ensamble.getEnSala());
             query.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("error en listar inser ENSAMBLE "+ e.getMessage());
+            System.out.println("error en listar inser ENSAMBLE " + e.getMessage());
         } finally {
             cierre();
         }
@@ -222,7 +203,7 @@ public class CosultDBaux {
             query.setString(1, nombreMu);
             result = query.executeQuery();
             while (result.next()) {
-               ganancia=(result.getDouble("precio_venta")-result.getDouble("costo"));
+                ganancia = (result.getDouble("precio_venta") - result.getDouble("costo"));
             }
         } catch (SQLException e) {
             System.out.println("error en listar priductos");

@@ -20,8 +20,18 @@ public class ConsulDB {
     private Connection conexion = null;
     private int resul;
 
-    public List listar() {
+    public List listar(boolean odenada, boolean as) {
+        String consultaAsc = "SELECT * FROM pieza ORDER BY cantidad";
+        String consultaDes = "SELECT * FROM pieza ORDER BY cantidad desc";
         String consulta = "SELECT * FROM pieza";
+        if (odenada) {
+            if (as) {
+                consulta = consultaAsc;
+            } else {
+                consulta = consultaDes;
+            }
+        }
+
         List<Pieza> lista = new ArrayList<>();
         try {
             conexion = Conexion.getConexion();
@@ -114,6 +124,40 @@ public class ConsulDB {
         return lista;
     }
 
+    public List infoMCreados(boolean ordenado, boolean as) {
+        List<Ensamble> lista = new ArrayList<>();
+        String consulta= "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña)";
+        String consultaAsc= "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) ORDER BY a.Fecha";
+        String consultaDes = "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) ORDER BY a.Fecha desc";
+        if (ordenado) {
+            if (as) {
+                consulta = consultaAsc;
+            }else{
+                consulta = consultaDes;
+            }
+        }
+
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            result = query.executeQuery();
+            while (result.next()) {
+                Ensamble Ensamble = new Ensamble();
+                Ensamble.setId(Integer.parseInt(result.getString("id")));
+                Ensamble.setMueble(result.getString("mueble"));
+                Ensamble.setEnsamblador(result.getString("nombre"));
+                Ensamble.setFecha(result.getDate("Fecha"));
+                Ensamble.setEnSala(result.getBoolean("en_sala"));
+                lista.add(Ensamble);
+            }
+        } catch (SQLException e) {
+            System.out.println("error validar");
+        } finally {
+            cierre();
+        }
+        return lista;
+    }
+
     public void enSala(String id) {
         try {
             String consulta = "UPDATE ensamble SET en_sala=1 WHERE id=?";
@@ -131,16 +175,15 @@ public class ConsulDB {
 
     public int Actualizar(Pieza piezaActualizar, String nombre) {
         try {
-            String consulta = "UPDATE pieza SET nombre=?, costo=?, cantidad=? WHERE nombre=?";
+            String consulta = "UPDATE pieza SET  costo=?, cantidad=? WHERE nombre=?";
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
-            query.setString(1, piezaActualizar.getNombre());
-            query.setDouble(2, piezaActualizar.getCosto());
-            query.setInt(3, piezaActualizar.getCantidad());
-            query.setString(4, nombre);
+            query.setDouble(1, piezaActualizar.getCosto());
+            query.setInt(2, piezaActualizar.getCantidad());
+            query.setString(3, nombre);
             query.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Error en Actualizar pieza");
+            System.out.println("No puedes Actualizar el nombre");
         } finally {
             cierre();
         }
@@ -156,7 +199,7 @@ public class ConsulDB {
             query.setString(1, nombre);
             query.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Erro en eliminar");
+            System.out.println("un Tipo de mueble necista esta pieza, no la puedes eliminar solo puedes eliminar Piezas que no le podrian servir a los muebles");
         } finally {
             cierre();
         }
@@ -227,4 +270,5 @@ public class ConsulDB {
         }
         return us;
     }
+
 }

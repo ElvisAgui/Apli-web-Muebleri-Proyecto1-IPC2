@@ -15,6 +15,7 @@ public class Ensamble {
     private Date fecha;
     private double ganancia;
     private boolean enSala;
+    private String enVenta;
 
     public int getId() {
         return id;
@@ -68,6 +69,16 @@ public class Ensamble {
         return (int)(Math.random()*9999);
         
     }
+
+    public String getEnVenta() {
+        if (enSala) {
+            enVenta = "NO";
+        }else{
+            enVenta = "SI";
+        }
+        return enVenta;
+    }
+    
     
     public static Date getFecha(String localDate){
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
