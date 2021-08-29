@@ -12,8 +12,6 @@ import com.proyectoipc.modelo.Pieza;
 import com.proyectoipc.Entidades.Pieza_Muble;
 import com.proyectoipc.modelo.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,171 +43,170 @@ public class Controlador extends HttpServlet {
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
-        if (menu.equals("fabrica")) {
-            request.getRequestDispatcher("Area-Fabrica/Principal-Frabricacion.jsp").forward(request, response);
-        } else if (menu.equals("Ventas")) {
-            request.getRequestDispatcher("Area-Fabrica/Principal-Frabricacion.jsp").forward(request, response);
+        switch (menu) {
+            case "fabrica":
+                request.getRequestDispatcher("Area-Fabrica/Principal-Frabricacion.jsp").forward(request, response);
+                break;
+            case "Crear":
+                switch (accion) {
+                    case "listar":
+                        List lista = consul.listar(false, false);
+                        List listAgotada = consul.listaAgotada();
+                        request.setAttribute("piezas", lista);
+                        request.setAttribute("piezasAgot", listAgotada);
+                        break;
+                    case "Editar":
+                        nomPieza = request.getParameter("nom");
+                        Pieza pi = consul.buscarPieza(nomPieza);
+                        request.setAttribute("piezaA", pi);
+                        request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
 
-        } else if (menu.equals("Administracion")) {
+                        break;
+                    case "Actualizar":
+                        pieza.setNombre(request.getParameter("nombreE"));
+                        pieza.setCosto(Double.parseDouble(request.getParameter("costoE")));
+                        pieza.setCantidad(Integer.parseInt(request.getParameter("cantidadE")));
+                        consul.Actualizar(pieza, nomPieza);
+                        request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
+                        break;
+                    case "Agregar":
+                        pieza.setNombre(request.getParameter("nombreN"));
+                        pieza.setCosto(Double.parseDouble(request.getParameter("costoN")));
+                        pieza.setCantidad(Integer.parseInt(request.getParameter("cantidadN")));
+                        consul.CrearPieza(pieza);
+                        request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
+                        break;
+                    case "Eliminar":
+                        nomPieza = request.getParameter("nom");
+                        consul.eliminar(nomPieza);
+                        request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
+                        break;
+                    default:
+                        ///erorro
+                        break;
 
-            request.getRequestDispatcher("Area-Fabrica/Principal-Frabricacion.jsp").forward(request, response);
+                }
+                request.getRequestDispatcher("Area-Fabrica/Crear-Pieza.jsp").forward(request, response);
+                break;
+            case "Ensamble":
+                switch (accion) {
+                    case "ListarM":
+                        List listAgotada = consul.listaAgotada();
+                        request.setAttribute("piezasAgot", listAgotada);
+                        List listM = dbAux.listarMueble(false);
+                        List listMEn = dbAux.listarMueble(true);
+                        List lista = consul.listar(false, false);
+                        request.setAttribute("piezas", lista);
+                        request.setAttribute("mueblesEnsam", listMEn);
+                        request.setAttribute("muebles", listM);
+                        request.setAttribute("usuario", nombreus);
+                        break;
+                    case "AgregarP":
+                        piMue.setNombreP(request.getParameter("nomPi"));
+                        request.setAttribute("Mue_PI", piMue);
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                        break;
+                    case "AgregarM":
+                        piMue.setNombreM(request.getParameter("nomM"));
+                        request.setAttribute("Mue_PI", piMue);
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                        break;
+                    case "Confirmar":
+                        int cant = Integer.parseInt(request.getParameter("cantidadP"));
+                        piMue.setCantidad(cant);
+                        dbAux.ensambePiesMueble(piMue);
+                        piMue.setCantidad(0);
+                        piMue.setNombreM(null);
+                        piMue.setNombreP(null);
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                        break;
+                    case "Refrescar":
+                        dbAux.EnsamblarMueble();
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                        break;
+                    case "mubleEnsamblado":
+                        LocalDateTime localDate = LocalDateTime.now();
+                        DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                        mEnsambel.setMueble(request.getParameter("nomEns"));
+                        request.setAttribute("muebleEnsable", mEnsambel);
+                        request.setAttribute("fecha", ad.format(localDate));
+                        mEnsambel.setFecha(Ensamble.getFecha(ad.format(localDate)));
+                        request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
+                        break;
+                    case "Registrar":
+                        if (dbAux.existeUsuario(request.getParameter("ensamblador"))) {
+                            mEnsambel.setEnsamblador(request.getParameter("ensamblador"));
+                            mEnsambel.setId(Ensamble.id());
+                            mEnsambel.setGanancia(dbAux.calcGanancia(mEnsambel.getMueble()));
+                            mEnsambel.setEnSala(false);
+                            dbAux.guardarEnsamble(mEnsambel);
+                            request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
 
-        } else if (menu.equals("Crear")) {
-            switch (accion) {
-                case "listar":
-                    List lista = consul.listar(false, false);
-                    List listAgotada = consul.listaAgotada();
-                    request.setAttribute("piezas", lista);
-                    request.setAttribute("piezasAgot", listAgotada);
-                    break;
-                case "Editar":
-                    nomPieza = request.getParameter("nom");
-                    Pieza pi = consul.buscarPieza(nomPieza);
-                    request.setAttribute("piezaA", pi);
-                    request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
+                        }
 
-                    break;
-                case "Actualizar":
-                    pieza.setNombre(request.getParameter("nombreE"));
-                    pieza.setCosto(Double.parseDouble(request.getParameter("costoE")));
-                    pieza.setCantidad(Integer.parseInt(request.getParameter("cantidadE")));
-                    consul.Actualizar(pieza, nomPieza);
-                    request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
-                    break;
-                case "Agregar":
-                    pieza.setNombre(request.getParameter("nombreN"));
-                    pieza.setCosto(Double.parseDouble(request.getParameter("costoN")));
-                    pieza.setCantidad(Integer.parseInt(request.getParameter("cantidadN")));
-                    consul.CrearPieza(pieza);
-                    request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
-                    break;
-                case "Eliminar":
-                    nomPieza = request.getParameter("nom");
-                    consul.eliminar(nomPieza);
-                    request.getRequestDispatcher("Controlador?menu=Crear&accion=listar").forward(request, response);
-                    break;
-                default:
-                    ///erorro
-                    break;
-
-            }
-            request.getRequestDispatcher("Area-Fabrica/Crear-Pieza.jsp").forward(request, response);
-
-        } else if (menu.equals("Ensamble")) {
-            switch (accion) {
-                case "ListarM":
-                    List listAgotada = consul.listaAgotada();
-                    request.setAttribute("piezasAgot", listAgotada);
-                    List listM = dbAux.listarMueble(false);
-                    List listMEn = dbAux.listarMueble(true);
-                    List lista = consul.listar(false, false);
-                    request.setAttribute("piezas", lista);
-                    request.setAttribute("mueblesEnsam", listMEn);
-                    request.setAttribute("muebles", listM);
-                    request.setAttribute("usuario", nombreus);
-                    break;
-                case "AgregarP":
-                    piMue.setNombreP(request.getParameter("nomPi"));
-                    request.setAttribute("Mue_PI", piMue);
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-                    break;
-                case "AgregarM":
-                    piMue.setNombreM(request.getParameter("nomM"));
-                    request.setAttribute("Mue_PI", piMue);
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-                    break;
-                case "Confirmar":
-                    int cant = Integer.parseInt(request.getParameter("cantidadP"));
-                    piMue.setCantidad(cant);
-                    dbAux.ensambePiesMueble(piMue);
-                    piMue.setCantidad(0);
-                    piMue.setNombreM(null);
-                    piMue.setNombreP(null);
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-                    break;
-                case "Refrescar":
-                    dbAux.EnsamblarMueble();
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-                    break;
-                case "mubleEnsamblado":
-                    LocalDateTime localDate = LocalDateTime.now();
-                    DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
-                    mEnsambel.setMueble(request.getParameter("nomEns"));
-                    request.setAttribute("muebleEnsable", mEnsambel);
-                    request.setAttribute("fecha", ad.format(localDate));
-                    mEnsambel.setFecha(Ensamble.getFecha(ad.format(localDate)));
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-                    break;
-                case "Registrar":
-                    if (dbAux.existeUsuario(request.getParameter("ensamblador"))) {
-                        mEnsambel.setEnsamblador(request.getParameter("ensamblador"));
-                        mEnsambel.setId(Ensamble.id());
-                        mEnsambel.setGanancia(dbAux.calcGanancia(mEnsambel.getMueble()));
-                        mEnsambel.setEnSala(false);
-                        dbAux.guardarEnsamble(mEnsambel);
                         request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
 
-                    }
-
-                    request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
-
-                    break;
-                default:
-                    ///erorro
-                    break;
+                        break;
+                    default:
+                        ///erorro
+                        break;
+                }
+                request.getRequestDispatcher("Area-Fabrica/Ensamblar-Mueble.jsp").forward(request, response);
+                break;
+            case "Registro":
+                switch (accion) {
+                    case "lisatSala":
+                        List Ensamble = consul.listaParaVenta();
+                        request.setAttribute("listaParaVenta", Ensamble);
+                        break;
+                    case "resigstroSala":
+                        consul.enSala("" + request.getParameter("ensala"));
+                        request.getRequestDispatcher("Controlador?menu=Registro&accion=lisatSala").forward(request, response);
+                        break;
+                }
+                request.getRequestDispatcher("Area-Fabrica/Sala-Venta.jsp").forward(request, response);
+                break;
+            case "infoPiezas": {
+                List lista;
+                switch (accion) {
+                    case "listaP":
+                        lista = consul.listar(false, true);
+                        request.setAttribute("piezas", lista);
+                        break;
+                    case "ordenAsen":
+                        lista = consul.listar(true, true);
+                        request.setAttribute("piezas", lista);
+                        break;
+                    case "ordenDes":
+                        lista = consul.listar(true, false);
+                        request.setAttribute("piezas", lista);
+                        break;
+                }
+                request.getRequestDispatcher("Area-Fabrica/Info-Piezas.jsp").forward(request, response);
+                break;
             }
-            request.getRequestDispatcher("Area-Fabrica/Ensamblar-Mueble.jsp").forward(request, response);
-        } else if (menu.equals("Registro")) {
-            switch (accion) {
-                case "lisatSala":
-                    List Ensamble = consul.listaParaVenta();
-                    request.setAttribute("listaParaVenta", Ensamble);
-                    break;
-                case "resigstroSala":
-                    consul.enSala("" + request.getParameter("ensala"));
-                    request.getRequestDispatcher("Controlador?menu=Registro&accion=lisatSala").forward(request, response);
-                    break;
+            case "infoMueble": {
+                List lista;
+                switch (accion) {
+                    case "listaM":
+                        lista = consul.infoMCreados(false, true);
+                        request.setAttribute("infoMue", lista);
+                        break;
+                    case "ordenAsen":
+                        lista = consul.infoMCreados(true, true);
+                        request.setAttribute("infoMue", lista);
+                        break;
+                    case "ordenDes":
+                        lista = consul.infoMCreados(true, false);
+                        request.setAttribute("infoMue", lista);
+                        break;
+                }
+                request.getRequestDispatcher("Area-Fabrica/Info-Mueble.jsp").forward(request, response);
+                break;
             }
-            request.getRequestDispatcher("Area-Fabrica/Sala-Venta.jsp").forward(request, response);
-
-        } else if (menu.equals("infoPiezas")) {
-            List lista;
-            switch (accion) {
-                case "listaP":
-                    lista = consul.listar(false, true);
-                    request.setAttribute("piezas", lista);
-                    break;
-                case "ordenAsen":
-                    lista = consul.listar(true, true);
-                    request.setAttribute("piezas", lista);
-                    break;
-                case "ordenDes":
-                    lista = consul.listar(true, false);
-                    request.setAttribute("piezas", lista);
-                    break;
-            }
-            request.getRequestDispatcher("Area-Fabrica/Info-Piezas.jsp").forward(request, response);
-        } else if (menu.equals("infoMueble")) {
-            List lista;
-            switch (accion) {
-                case "listaM":
-                   lista = consul.infoMCreados(false, true);
-                   request.setAttribute("infoMue", lista);
-                    break;
-                case "ordenAsen":
-                    lista = consul.infoMCreados(true, true);
-                    request.setAttribute("infoMue", lista);
-                    break;
-                case "ordenDes":
-                    lista = consul.infoMCreados(true, false);
-                    request.setAttribute("infoMue", lista);
-                    break;
-            }
-            request.getRequestDispatcher("Area-Fabrica/Info-Mueble.jsp").forward(request, response);
-
-        } else {
-            response.sendRedirect("sesion/index.jsp");
-
+            default:
+                response.sendRedirect("sesion/index.jsp");
+                break;
         }
 
     }

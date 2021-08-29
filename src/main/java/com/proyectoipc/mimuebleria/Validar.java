@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -27,13 +28,13 @@ public class Validar extends HttpServlet {
             throws ServletException, IOException {
 
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,15 +44,22 @@ public class Validar extends HttpServlet {
             String contras = request.getParameter("contra");
             us = usDB.validar(nombre, contras);
             if (us.getNombre() != null && us.getActivo() == 1) {
-                if (us.getRol() == 1) {
-                    request.setAttribute("usuario", us);
-                    request.getRequestDispatcher("Controlador?menu=fabrica").forward(request, response);
-                } else if (us.getRol() == 2) {
-                    request.getRequestDispatcher("Controlador?menu=Ventas").forward(request, response);
-                } else if (us.getRol() == 3) {
-                    request.getRequestDispatcher("Controlador?menu=Administaracion").forward(request, response);
-                } else {
-                    response.sendRedirect("sesion/index.jsp");
+                switch (us.getRol()) {
+                    case 1:
+                        request.setAttribute("usuario", us);
+                        request.getRequestDispatcher("Controlador?menu=fabrica").forward(request, response);
+                        break;
+                    case 2:
+                        request.setAttribute("usuario", us);
+                        request.getRequestDispatcher("Controlador?menu=Ventas").forward(request, response);
+                        break;
+                    case 3:
+                        request.setAttribute("usuario", us);
+                        request.getRequestDispatcher("ControladorAdmin?menu=Administracion").forward(request, response);
+                        break;
+                    default:
+                        response.sendRedirect("sesion/index.jsp");
+                        break;
                 }
             } else {
                 response.sendRedirect("sesion/index.jsp");
@@ -61,8 +69,8 @@ public class Validar extends HttpServlet {
         }
 
     }
-
     
+
     @Override
     public String getServletInfo() {
         return "Short description";

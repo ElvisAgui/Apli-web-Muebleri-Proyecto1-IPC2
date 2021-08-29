@@ -9,13 +9,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="../css/estilos.css">
+        <link rel="stylesheet" href="../resources/css/estilos.css">
         <title>Mi-Muebleria</title>
 
     </head>
-    <body background="../imagenes/fondo.jpg">
+    <body background="../resources/imagenes/fondo.jpg">
         <div class = "login">
-            <img class="logo" src="../imagenes/login.jpg " alt="logo-imgen"/>   
+            <img class="logo" src="../resources/imagenes/login.jpg " alt="logo-imgen"/>   
             <h1>Binevenid@ Inicia Sesion</h1>
             <form action="../Validar" method="POST">
                 <label for="username">Usuario</label>

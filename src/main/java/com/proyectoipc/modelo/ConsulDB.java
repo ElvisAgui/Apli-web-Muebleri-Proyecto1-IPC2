@@ -2,12 +2,14 @@ package com.proyectoipc.modelo;
 
 import com.proyectoipc.Entidades.Ensamble;
 import com.proyectoipc.conexionSQL.Conexion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  *
@@ -126,13 +128,13 @@ public class ConsulDB {
 
     public List infoMCreados(boolean ordenado, boolean as) {
         List<Ensamble> lista = new ArrayList<>();
-        String consulta= "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña)";
-        String consultaAsc= "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) ORDER BY a.Fecha";
+        String consulta = "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña)";
+        String consultaAsc = "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) ORDER BY a.Fecha";
         String consultaDes = "SELECT a.id, a.mueble, e.nombre, a.en_sala, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) ORDER BY a.Fecha desc";
         if (ordenado) {
             if (as) {
                 consulta = consultaAsc;
-            }else{
+            } else {
                 consulta = consultaDes;
             }
         }
