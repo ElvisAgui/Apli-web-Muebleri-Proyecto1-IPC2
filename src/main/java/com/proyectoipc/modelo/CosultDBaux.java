@@ -37,6 +37,9 @@ public class CosultDBaux {
         }
     }
 
+    /**
+     *actualiza el costo de los muebles con base a las piezas que insertaron
+     */
     public void EnsamblarMueble() {
         double suma = 0;
         String nombPieza;
@@ -120,7 +123,12 @@ public class CosultDBaux {
         }
         return lista;
     }
-
+    
+    /**
+     * verifica si el usuarios existe mediante su contraseña
+     * @param nombre
+     * @return 
+     */
     public boolean existeUsuario(String nombre) {
         boolean existe = false;
         String consulta = "SELECT contraseña FROM usuario WHERE contraseña=?";

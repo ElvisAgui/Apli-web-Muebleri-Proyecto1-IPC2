@@ -23,10 +23,10 @@
                         <a class="nav-link active" aria-current="page" href="#">ADMINISTRACION</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="ControladorAdmin?menu=Carga&accion=Archivo" target="myFrame">SubirArchivo</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=Carga" target="myFrame">SubirArchivo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="Controlador?menu=Ensamble&accion=ListarM" target="myFrame">Ensamblar Mueble</a>
+                        <a class="btn btn-outline-light" href="Controlador?menu=Reportes&accion=nada" target="myFrame">Area de Reportes</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-light" href="Controlador?menu=Registro&accion=lisatSala" target="myFrame">En Venta</a>

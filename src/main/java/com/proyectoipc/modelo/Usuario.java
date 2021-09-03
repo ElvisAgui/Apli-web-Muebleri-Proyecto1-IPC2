@@ -9,13 +9,13 @@ public class Usuario {
     private String contra;
     private String nombre;
     private int rol;
-    private int activo;
+    private boolean activo;
     
     public Usuario(){
         
     }
 
-    public Usuario(String contra, String nombre, int rol, int activo) {
+    public Usuario(String contra, String nombre, int rol, boolean activo) {
         this.contra = contra;
         this.nombre = nombre;
         this.rol = rol;
@@ -46,11 +46,11 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public int getActivo() {
+    public boolean getActivo() {
         return activo;
     }
 
-    public void setActivo(int activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
     

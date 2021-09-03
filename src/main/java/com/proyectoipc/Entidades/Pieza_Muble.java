@@ -16,7 +16,7 @@ public class Pieza_Muble {
         
     }
 
-    public Pieza_Muble(String nombreP, String nombreM, int cantidad) {
+    public Pieza_Muble(String nombreM, String nombreP, int cantidad) {
         this.nombreP = nombreP;
         this.nombreM = nombreM;
         this.cantidad = cantidad;

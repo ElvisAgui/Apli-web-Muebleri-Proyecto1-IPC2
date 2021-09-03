@@ -43,7 +43,7 @@ public class Validar extends HttpServlet {
             String nombre = request.getParameter("txtUsuario");
             String contras = request.getParameter("contra");
             us = usDB.validar(nombre, contras);
-            if (us.getNombre() != null && us.getActivo() == 1) {
+            if (us.getNombre() != null && us.getActivo()) {
                 switch (us.getRol()) {
                     case 1:
                         request.setAttribute("usuario", us);
@@ -55,7 +55,7 @@ public class Validar extends HttpServlet {
                         break;
                     case 3:
                         request.setAttribute("usuario", us);
-                        request.getRequestDispatcher("ControladorAdmin?menu=Administracion").forward(request, response);
+                        request.getRequestDispatcher("AdminControl?menu=Admin").forward(request, response);
                         break;
                     default:
                         response.sendRedirect("sesion/index.jsp");
@@ -69,7 +69,6 @@ public class Validar extends HttpServlet {
         }
 
     }
-    
 
     @Override
     public String getServletInfo() {

@@ -4,7 +4,11 @@
     Author     : elvis_agui
 --%>
 
+<%@page import="com.proyectoipc.archivos.LectorArchivio"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,20 +18,50 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Carga de datos</h1>
-        <div class="container p-5">
-            <div class="row flex-column justify-content-center">
-                <h1 class="bg-danger col-sm-8 m-auto text-center p-2">Subir Archivo</h1>
-                <form class="col-sm-8 m-auto p-2" action="../Archivo" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input class="form-contro" name="archivo" type="file" placeholder="Ingrese el archivo">
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-succes" name="action" value="add">SUBIR</button>
-                    </div>
-                </form>
+        <div class="d-flex"> 
+            <div class="card-body" style="background-color:dimgrey">
+                <div class="bg-danger col-sm-8 m-auto text-center p-2" style="background-color:brown ">
+                    <h1 class="text-center">Carga de Archivos</h1>
+                </div>
             </div>
-        </div> 
+        </div>
+        <div class="d-flex"> 
+            <div class="card col-sm-6" style="background-color:#6ce7b2">
+                <div class="card-body" style="background-color:activecaption ">
+                    <form class="col-sm-8 m-auto p-2" action="Controlador?menu=Carga" method="POST" enctype="multipart/form-data">
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <input class="btn btn-secondary" name="archivo" type="file" placeholder="Ingrese el archivo">
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <button class="btn btn-info" name="action" value="add">CARGAR</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card col-sm-6" style="background-color: mintcream">
+                <div class="card-body" style="background-color:activecaption ">
+                   <table class="table-danger table-hover text-center">
+                      <%
+                    ArrayList<String> mensajes = new ArrayList<>();
+                    mensajes = LectorArchivio.errores;
+                    if (mensajes != null) {
+                        for (String mensaje : mensajes) {
+                            out.println(mensaje+"<br/>");
+                        }
+                    }else{
+                        out.println("Lista De posibles Errores");
+                    }
+                %>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>

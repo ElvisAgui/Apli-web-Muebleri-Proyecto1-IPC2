@@ -21,7 +21,13 @@ public class ConsulDB {
     private ResultSet result = null;
     private Connection conexion = null;
     private int resul;
-
+    
+    /**
+     * un lista depende si es ascendente o descentdne 
+     * @param odenada
+     * @param as
+     * @return lista de piezas
+     */
     public List listar(boolean odenada, boolean as) {
         String consultaAsc = "SELECT * FROM pieza ORDER BY cantidad";
         String consultaDes = "SELECT * FROM pieza ORDER BY cantidad desc";
@@ -54,7 +60,11 @@ public class ConsulDB {
 
         return lista;
     }
-
+    /**
+     * busca la pieza por su nombre 
+     * @param nombre
+     * @return un Pieza buscada
+     */
     public Pieza buscarPieza(String nombre) {
         Pieza econtrada = new Pieza();
         String consulta = "SELECT * FROM pieza WHERE nombre=?";
@@ -77,7 +87,10 @@ public class ConsulDB {
 
         return econtrada;
     }
-
+    /**
+     * lista todas las piezas a agotarse
+     * @return 
+     */
     public List listaAgotada() {
         String consulta = "SELECT * FROM pieza WHERE cantidad <= 10";
         List<Pieza> lista = new ArrayList<>();
@@ -101,7 +114,10 @@ public class ConsulDB {
         }
         return lista;
     }
-
+    /**
+     * lista todas los ensambles sin registrar en sala de ventas
+     * @return 
+     */
     public List listaParaVenta() {
         List<Ensamble> lista = new ArrayList<>();
         String consulta = "SELECT a.id, a.mueble, e.nombre, a.Fecha FROM ensamble a JOIN usuario e ON (a.ensamblador = e.contraseña) WHERE a.en_sala = 0";
@@ -174,6 +190,12 @@ public class ConsulDB {
         }
 
     }
+    /**
+     * actualiza las piezas aun no referenciadas
+     * @param piezaActualizar
+     * @param nombre
+     * @return 
+     */
 
     public int Actualizar(Pieza piezaActualizar, String nombre) {
         try {
@@ -206,7 +228,11 @@ public class ConsulDB {
             cierre();
         }
     }
-
+    /**
+     * recibe una pieza para Insertarla en la base de datos
+     * @param piezaCreada
+     * @return 
+     */
     public int CrearPieza(Pieza piezaCreada) {
         try {
             String consulta = "INSERT INTO pieza(nombre, costo, cantidad) VALUES (?,?,?)";
@@ -262,7 +288,7 @@ public class ConsulDB {
                 us.setNombre(result.getString("nombre"));
                 us.setContra(result.getString("contraseña"));
                 us.setRol(result.getInt("rol"));
-                us.setActivo(result.getInt("activo"));
+                us.setActivo(result.getBoolean("activo"));
 
             }
         } catch (SQLException e) {

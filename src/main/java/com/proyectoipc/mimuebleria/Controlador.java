@@ -5,28 +5,43 @@
  */
 package com.proyectoipc.mimuebleria;
 
-import com.proyectoipc.Entidades.Ensamble;
-import com.proyectoipc.modelo.ConsulDB;
-import com.proyectoipc.modelo.CosultDBaux;
-import com.proyectoipc.modelo.Pieza;
-import com.proyectoipc.Entidades.Pieza_Muble;
-import com.proyectoipc.modelo.Usuario;
+import com.proyectoipc.Entidades.*;
+import com.proyectoipc.archivos.InsertsCampos;
+import com.proyectoipc.modelo.*;
+import com.proyectoipc.archivos.LectorArchivio;
+import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author elvis_agui
  */
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 100
+)
 public class Controlador extends HttpServlet {
 
+    LocalDateTime localDate = LocalDateTime.now();
+    DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    Cliente cliF = new Cliente();
+    VentaSQL retrs = new VentaSQL();
+    Venta vtn;
+    List<Venta> listaV = new ArrayList<>();
+    String fac = VentaSQL.nomFac();
     LocalDate fecha;
     Pieza pieza = new Pieza();
     CosultDBaux dbAux = new CosultDBaux();
@@ -46,6 +61,12 @@ public class Controlador extends HttpServlet {
         switch (menu) {
             case "fabrica":
                 request.getRequestDispatcher("Area-Fabrica/Principal-Frabricacion.jsp").forward(request, response);
+                break;
+            case "Admin":
+                request.getRequestDispatcher("Admin/Princiapal-Administracion.jsp").forward(request, response);
+                break;
+            case "Ventas":
+                request.getRequestDispatcher("Venta/Principal-Ventas.jsp").forward(request, response);
                 break;
             case "Crear":
                 switch (accion) {
@@ -130,9 +151,16 @@ public class Controlador extends HttpServlet {
                         mEnsambel.setMueble(request.getParameter("nomEns"));
                         request.setAttribute("muebleEnsable", mEnsambel);
                         request.setAttribute("fecha", ad.format(localDate));
-                        mEnsambel.setFecha(Ensamble.getFecha(ad.format(localDate)));
+                         {
+                            try {
+                                mEnsambel.setFecha(Ensamble.getFecha(ad.format(localDate)));
+                            } catch (ParseException ex) {
+                                System.out.println("error en fecha");
+                            }
+                        }
                         request.getRequestDispatcher("Controlador?menu=Ensamble&accion=ListarM").forward(request, response);
                         break;
+
                     case "Registrar":
                         if (dbAux.existeUsuario(request.getParameter("ensamblador"))) {
                             mEnsambel.setEnsamblador(request.getParameter("ensamblador"));
@@ -166,7 +194,7 @@ public class Controlador extends HttpServlet {
                 }
                 request.getRequestDispatcher("Area-Fabrica/Sala-Venta.jsp").forward(request, response);
                 break;
-            case "infoPiezas": {
+            case "infoPiezas":
                 List lista;
                 switch (accion) {
                     case "listaP":
@@ -184,26 +212,127 @@ public class Controlador extends HttpServlet {
                 }
                 request.getRequestDispatcher("Area-Fabrica/Info-Piezas.jsp").forward(request, response);
                 break;
-            }
-            case "infoMueble": {
-                List lista;
+
+            case "infoMueble":
+                List listaMu;
                 switch (accion) {
                     case "listaM":
-                        lista = consul.infoMCreados(false, true);
-                        request.setAttribute("infoMue", lista);
+                        listaMu = consul.infoMCreados(false, true);
+                        request.setAttribute("infoMue", listaMu);
                         break;
                     case "ordenAsen":
-                        lista = consul.infoMCreados(true, true);
-                        request.setAttribute("infoMue", lista);
+                        listaMu = consul.infoMCreados(true, true);
+                        request.setAttribute("infoMue", listaMu);
                         break;
                     case "ordenDes":
-                        lista = consul.infoMCreados(true, false);
-                        request.setAttribute("infoMue", lista);
+                        listaMu = consul.infoMCreados(true, false);
+                        request.setAttribute("infoMue", listaMu);
                         break;
                 }
                 request.getRequestDispatcher("Area-Fabrica/Info-Mueble.jsp").forward(request, response);
                 break;
-            }
+
+            case "Carga":
+                request.getRequestDispatcher("Admin/Carcha-Archivo.jsp").forward(request, response);
+                String acciont = request.getParameter("action");
+                if (acciont.equals("add")) {
+                    LectorArchivio lec = new LectorArchivio();
+                    Part file = request.getPart("archivo");
+                    String nombreArchivo = file.getSubmittedFileName();
+                    String path = this.getServletConfig().getServletContext().getRealPath("/archivo");
+                    File directorio = new File(path);
+                    System.out.println(path);
+                    if (!directorio.exists()) {
+                        directorio.mkdir();
+                    }
+                    file.write(path + "/" + nombreArchivo);
+                    File archivo = new File(path + "/" + nombreArchivo);
+                    lec.leerFichero(archivo);
+                    request.getRequestDispatcher("Admin/Carcha-Archivo.jsp").forward(request, response);
+                }
+                break;
+            case "Reportes":
+                ReportesSQL repo = new ReportesSQL();
+                switch (accion) {
+                    case "nada":
+                        String hola = "hola";
+                        request.setAttribute("hola", hola);
+                        break;
+                    case "Filtrar":
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        repo.setFechaI(fechaI);
+                        repo.setFechaF(fechaF);
+                        break;
+                    case "RVenta":
+                        ArrayList<String> lisR = repo.obtenerCorrelativoVenta();
+                        request.setAttribute("correlativos", lisR);
+                        request.setAttribute("VentasR", repo.listaVenta(lisR));
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Reportes.jsp").forward(request, response);
+
+                break;
+            case "Venta":
+                request.setAttribute("fecha", ad.format(localDate));
+                request.setAttribute("factura", fac);
+                switch (accion) {
+                    case "nada":
+                        request.setAttribute("nada", new String("hola"));
+                        break;
+                    case "Buscar":
+                        String ClienteEncontrado = retrs.existeCliente(request.getParameter("cliente"));
+                        request.setAttribute("nomEncontrado", ClienteEncontrado);
+                        break;
+                    case "registrar":
+                        InsertsCampos in = new InsertsCampos();
+                        Cliente cli = new Cliente(request.getParameter("NIT"), request.getParameter("nombre"), request.getParameter("Direccion"));
+                        in.insertarCliente(cli);
+                        break;
+                    case "insertar":
+                        if (!retrs.existeCliente(request.getParameter("Nitcliente")).equals("NO ESTA REGISTRADO")) {
+                            cliF = retrs.clienteF(request.getParameter("Nitcliente"));
+                        }
+                        request.setAttribute("cliente", cliF);
+                        break;
+                    case "Agregar":
+                        if (!retrs.existeEnsamble(request.getParameter("codigo")).equals("no")) {
+                            vtn = new Venta();
+                            vtn.setCliente(cliF.getNit());
+                            vtn.setMueble_ensamblado(request.getParameter("codigo"));
+                            vtn.setGanancia(retrs.ganaciaV(request.getParameter("codigo")));
+                            vtn.setCorrelativo(fac);
+                            vtn.setNombreMueble(retrs.existeEnsamble(request.getParameter("codigo")));
+                            vtn.setPrecioV(retrs.precioV(retrs.existeEnsamble(request.getParameter("codigo"))));
+                            try {
+                                vtn.setFecha(Ensamble.getFecha(ad.format(localDate)));
+                            } catch (ParseException ex) {
+                                System.out.println("error fecha");
+                            }
+                        }
+                        if (!(retrs.repetidoLista(vtn.getMueble_ensamblado(), (ArrayList<Venta>) listaV))) {
+                            listaV.add(vtn);
+                        }
+                        request.setAttribute("listaV", listaV);
+                        request.getRequestDispatcher("Controlador?menu=Venta&accion=insertar").forward(request, response);
+                        break;
+                    case "Abortar":
+                        listaV.clear();
+                        break;
+                    case "Generar Venta":
+                        if (!(listaV == null || listaV.size() == 0)) {
+                            if (dbAux.existeUsuario(request.getParameter("usuario"))) {
+                                for (Venta venta : listaV) {
+                                    retrs.insertarVenta(venta, request.getParameter("usuario"));
+                                }
+                                listaV.clear();
+                                fac = VentaSQL.nomFac();
+                            }
+                        }
+                        break;
+                }
+                request.getRequestDispatcher("Venta/Venta.jsp").forward(request, response);
+                break;
             default:
                 response.sendRedirect("sesion/index.jsp");
                 break;
@@ -211,40 +340,18 @@ public class Controlador extends HttpServlet {
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -9,6 +9,17 @@ public class Cliente {
     private String nit;
     private String nombre;
     private String Direccion;
+    
+    public Cliente(){
+        
+    }
+
+    public Cliente(String nit, String nombre, String Direccion) {
+        this.nit = nit;
+        this.nombre = nombre;
+        this.Direccion = Direccion;
+    }
+    
 
     public String getNit() {
         return nit;
