@@ -1,13 +1,21 @@
+com/proyectoipc/controlador/Descarga.class
 com/proyectoipc/archivos/LectorArchivio.class
+com/proyectoipc/controlador/MuebleMasV.class
 com/proyectoipc/modelo/VentaSQL.class
+com/proyectoipc/controlador/Ganancia.class
 com/proyectoipc/archivos/Entidades.class
+com/proyectoipc/controlador/Devolucion.class
 com/proyectoipc/Entidades/Devolucion.class
 com/proyectoipc/Entidades/Pieza_Muble.class
+com/proyectoipc/controlador/Validar.class
+com/proyectoipc/controlador/VendedorV.class
 com/proyectoipc/modelo/Mueble.class
 com/proyectoipc/archivos/EscritorArchivos.class
 com/proyectoipc/Entidades/Venta.class
 com/proyectoipc/archivos/InsertsCampos.class
 com/proyectoipc/modelo/Pieza.class
+com/proyectoipc/controlador/AdminControl.class
+com/proyectoipc/controlador/Controlador.class
 com/proyectoipc/modelo/Usuario.class
 com/proyectoipc/Entidades/Cliente.class
 com/proyectoipc/conexionSQL/Conexion.class
@@ -15,3 +23,5 @@ com/proyectoipc/modelo/ReportesSQL.class
 com/proyectoipc/modelo/CosultDBaux.class
 com/proyectoipc/modelo/ConsulDB.class
 com/proyectoipc/Entidades/Ensamble.class
+com/proyectoipc/controlador/GananciaUsuario.class
+com/proyectoipc/controlador/MenosV.class
