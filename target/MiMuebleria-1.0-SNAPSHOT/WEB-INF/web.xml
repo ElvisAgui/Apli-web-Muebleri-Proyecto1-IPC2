@@ -36,6 +36,22 @@
         <servlet-name>Devolucion</servlet-name>
         <servlet-class>com.proyectoipc.controlador.Devolucion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Ganancia</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.Ganancia</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VendedorV</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.VendedorV</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MuebleMasV</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.MuebleMasV</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MenosV</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.MenosV</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
         <url-pattern>/Controlador</url-pattern>
@@ -63,6 +79,22 @@
     <servlet-mapping>
         <servlet-name>Devolucion</servlet-name>
         <url-pattern>/Devolucion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Ganancia</servlet-name>
+        <url-pattern>/Ganancia</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VendedorV</servlet-name>
+        <url-pattern>/VendedorV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MuebleMasV</servlet-name>
+        <url-pattern>/MuebleMasV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MenosV</servlet-name>
+        <url-pattern>/MenosV</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

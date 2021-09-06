@@ -231,7 +231,7 @@ public class VentaSQL {
     }
 
     public void insertarVenta(Venta venta, String usuario) {
-        String consulta = "INSERT INTO venta(mueble_ensamblado, cliente, vendedor, ganacia, fecha, correlativo) VALUES (?,?,?,?,?,?)";
+        String consulta = "INSERT INTO venta(mueble_ensamblado, cliente, vendedor, ganacia, fecha, correlativo, nombre_mueble) VALUES (?,?,?,?,?,?,?)";
         try {
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
@@ -241,6 +241,7 @@ public class VentaSQL {
             query.setDouble(4, venta.getGanancia());
             query.setDate(5, venta.getFecha());
             query.setString(6, venta.getCorrelativo());
+            query.setString(7, venta.getNombreMueble());
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("error en listar inser ventaE " + e.getMessage());

@@ -5,14 +5,11 @@
  */
 package com.proyectoipc.controlador;
 
-import com.proyectoipc.archivos.EscritorArchivos;
 import com.proyectoipc.Entidades.*;
 import com.proyectoipc.archivos.InsertsCampos;
 import com.proyectoipc.modelo.*;
 import com.proyectoipc.archivos.LectorArchivio;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -38,16 +35,16 @@ import javax.servlet.http.Part;
 )
 public class Controlador extends HttpServlet {
 
-    LocalDateTime localDate = LocalDateTime.now();
-    DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
-    Cliente cliF = new Cliente();
-    VentaSQL retrs = new VentaSQL();
-    Venta vtn;
-    List<Venta> listaV = new ArrayList<>();
+    private LocalDateTime localDate = LocalDateTime.now();
+    private DateTimeFormatter ad = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    private Cliente cliF = new Cliente();
+    private VentaSQL retrs = new VentaSQL();
+    private Venta vtn;
+    private List<Venta> listaV = new ArrayList<>();
     public static List<Venta> listaV1 = new ArrayList<>();
-    String fac = VentaSQL.nomFac();
-    LocalDate fecha;
-    Pieza pieza = new Pieza();
+    private String fac = VentaSQL.nomFac();
+    private LocalDate fecha;
+    private Pieza pieza = new Pieza();
     CosultDBaux dbAux = new CosultDBaux();
     ConsulDB consul = new ConsulDB();
     String nomPieza;
@@ -300,13 +297,88 @@ public class Controlador extends HttpServlet {
                                     listaV1.add(vtn);
                                 }
                             }
-                            
+
                         }
                         request.setAttribute("lista", listaV1);
                         break;
                 }
                 request.getRequestDispatcher("Admin/Reporte-Devolucion.jsp").forward(request, response);
-
+                break;
+            case "Rganancia":
+                ReportesSQL report = new ReportesSQL();
+                switch (accion) {
+                    case "nada":
+                        String hola = "hola";
+                        request.setAttribute("hola", hola);
+                        break;
+                    case "ganancia":
+                        listaV1.clear();
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        ArrayList<String> lisRlarga = report.obtenerIDMueble(fechaI, fechaF, false);
+                        for (String string : lisRlarga) {
+                            Venta vtn = report.obtenerVenta(string);
+                            listaV1.add(vtn);
+                        }
+                        request.setAttribute("total", report.obtenerTGanancia(fechaI, fechaF));
+                        request.setAttribute("lista", listaV1);
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Reporte-Ganancia.jsp").forward(request, response);
+                break;
+            case "RVendedor":
+                 ReportesSQL reporV = new ReportesSQL();
+                switch(accion){
+                    case "nada":
+                        request.setAttribute("hola", "hola");
+                        break;
+                    case "Vendedor":
+                         listaV1.clear();
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        String usuario = reporV.mejorVendedor(fechaI, fechaF);
+                        listaV1 = reporV.listVentaMejorVendedor(usuario);
+                        request.setAttribute("usuario", reporV.nombreV(usuario));
+                        request.setAttribute("lista", listaV1);
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Reporte-Vendedor.jsp").forward(request, response);
+                break;
+            case "RMueble":
+                 ReportesSQL reporM = new ReportesSQL();
+                switch(accion){
+                    case "nada":
+                        request.setAttribute("hola", "hola");
+                        break;
+                    case "Mueble":
+                         listaV1.clear();
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        String mueble = reporM.mejorMueble(fechaI, fechaF);
+                        listaV1 = reporM.listVentaMejorMueble(mueble);
+                        request.setAttribute("mueble", retrs.existeEnsamble(mueble));
+                        request.setAttribute("lista", listaV1);
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Reporte-Venta.jsp").forward(request, response);
+                break;
+            case "RMuebleP":
+                 ReportesSQL reporP = new ReportesSQL();
+                switch(accion){
+                    case "nada":
+                        request.setAttribute("hola", "hola");
+                        break;
+                    case "Mueble":
+                         listaV1.clear();
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        String mueble = reporP.peorMueble(fechaI, fechaF);
+                        listaV1 = reporP.listVentaMejorMueble(mueble);
+                        request.setAttribute("mueble", retrs.existeEnsamble(mueble));
+                        request.setAttribute("lista", listaV1);
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Mueble-MenosV.jsp").forward(request, response);
                 break;
             case "Venta":
                 request.setAttribute("fecha", ad.format(localDate));

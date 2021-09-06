@@ -30,7 +30,7 @@ public class EscritorArchivos {
                 linea = new PrintWriter(escribir);
                 if (esDv) {
                     linea.println(tituloD);
-                }else{
+                } else {
                     linea.println(tituloV);
                 }
                 for (Venta venta : lista) {
@@ -40,9 +40,9 @@ public class EscritorArchivos {
                     linea.print(venta.getNombreMueble() + ",");
                     linea.print(venta.getPrecioV() + ",");
                     if (esDv) {
-                        linea.print(venta.getCliente()+ ",");
+                        linea.print(venta.getCliente() + ",");
                         linea.print(venta.getFechaD() + ",");
-                        linea.print(venta.getPerdida() + ",");
+                        linea.print(venta.getPerdida());
                         linea.println("");
                     } else {
                         linea.print(venta.getCliente());
@@ -55,6 +55,119 @@ public class EscritorArchivos {
             }
         } else {
             System.out.println("archivo ay existens");
+        }
+        return nombreArchivo;
+    }
+
+    public String EscArchivoGanancia(ArrayList<Venta> lista, String path, String ganancia) {
+        nombreArchivo = path + "/reporteGanancia" + EscritorArchivos.id() + ".csv";
+        String titulo = "REPORTE GANANCIA\nFecha venta,ID Mueble,Nombre Producto,Precio venta";
+        archivo = new File(nombreArchivo);
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+                escribir = new FileWriter(archivo, true);
+                linea = new PrintWriter(escribir);
+                linea.println(titulo);
+                for (Venta venta : lista) {
+                    linea.print(venta.getFecha() + ",");
+                    linea.print(venta.getMueble_ensamblado() + ",");
+                    linea.print(venta.getNombreMueble() + ",");
+                    linea.print(venta.getVendedor() + ",");
+                    linea.print(venta.getPrecioV());
+                    linea.println("");
+                }
+                linea.println("Total ganancia,"+ganancia);
+                linea.close();
+            } catch (IOException ex) {
+                System.out.println("erroe en crear archivo ganancia");
+            }
+        } else {
+            System.out.println("archivo ya existens");
+        }
+        return nombreArchivo;
+    }
+    
+    public String EscArchivoUsuario(ArrayList<Venta> lista, String path, String usuario) {
+        nombreArchivo = path + "/reporteUsuario" + EscritorArchivos.id() + ".csv";
+        String titulo = "REPORTE USUARIO CON MAS VENTAS\nFecha venta,ID Mueble,Nombre Producto,Precio venta";
+        archivo = new File(nombreArchivo);
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+                escribir = new FileWriter(archivo, true);
+                linea = new PrintWriter(escribir);
+                linea.println(titulo);
+                linea.println("USUAIOR--,"+usuario);
+                for (Venta venta : lista) {
+                    linea.print(venta.getFecha() + ",");
+                    linea.print(venta.getMueble_ensamblado() + ",");
+                    linea.print(venta.getNombreMueble() + ",");
+                    linea.print(venta.getPrecioV());
+                    linea.println("");
+                }
+                linea.close();
+            } catch (IOException ex) {
+                System.out.println("erroe en crear archivo ganancia");
+            }
+        } else {
+            System.out.println("archivo ya existens");
+        }
+        return nombreArchivo;
+    }
+    public String EscArchivoMuebleM(ArrayList<Venta> lista, String path, String usuario) {
+        nombreArchivo = path + "/reporteMueble" + EscritorArchivos.id() + ".csv";
+        String titulo = "REPORTE MUEBLE MAS VENDIDO\nFecha venta,ID Mueble,Nombre Producto,Precio venta";
+        archivo = new File(nombreArchivo);
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+                escribir = new FileWriter(archivo, true);
+                linea = new PrintWriter(escribir);
+                linea.println(titulo);
+                linea.println("MUEBLE--,"+usuario);
+                for (Venta venta : lista) {
+                    linea.print(venta.getVendedor() + ",");
+                    linea.print(venta.getFecha() + ",");
+                    linea.print(venta.getMueble_ensamblado() + ",");
+                    linea.print(venta.getNombreMueble() + ",");
+                    linea.print(venta.getPrecioV());
+                    linea.println("");
+                }
+                linea.close();
+            } catch (IOException ex) {
+                System.out.println("erroe en crear archivo ganancia");
+            }
+        } else {
+            System.out.println("archivo ya existens");
+        }
+        return nombreArchivo;
+    }
+    public String EscArchivoMuebleMenos(ArrayList<Venta> lista, String path, String usuario) {
+        nombreArchivo = path + "/reporteMenos" + EscritorArchivos.id() + ".csv";
+        String titulo = "REPORTE Menos Vendido\nFecha venta,ID Mueble,Nombre Producto,Precio venta";
+        archivo = new File(nombreArchivo);
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+                escribir = new FileWriter(archivo, true);
+                linea = new PrintWriter(escribir);
+                linea.println(titulo);
+                linea.println("MUEBLE--,"+usuario);
+                for (Venta venta : lista) {
+                    linea.print(venta.getVendedor() + ",");
+                    linea.print(venta.getFecha() + ",");
+                    linea.print(venta.getMueble_ensamblado() + ",");
+                    linea.print(venta.getNombreMueble() + ",");
+                    linea.print(venta.getPrecioV());
+                    linea.println("");
+                }
+                linea.close();
+            } catch (IOException ex) {
+                System.out.println("erroe en crear archivo ganancia");
+            }
+        } else {
+            System.out.println("archivo ya existens");
         }
         return nombreArchivo;
     }

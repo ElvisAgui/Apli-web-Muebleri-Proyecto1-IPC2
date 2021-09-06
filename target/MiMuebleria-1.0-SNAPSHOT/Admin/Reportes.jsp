@@ -35,6 +35,7 @@
                     <table border="10" class="table table-success table-striped"> 
                         <thead>
                             <tr>
+                                <th>Vendedor</th>
                                 <th>Fecha</th>
                                 <th>ID</th>
                                 <th>Producto</th>
@@ -46,6 +47,7 @@
                             <c:forEach var="lista" items="${lista}">
                                 <c:if test="${Corr == lista.getCorrelativo()}">
                                     <tr>
+                                        <td>${lista.getVendedor()}</td>
                                         <td>${lista.getFecha()}</td>
                                         <td>${lista.getMueble_ensamblado()}</td>
                                         <td>${lista.getNombreMueble()}</td>

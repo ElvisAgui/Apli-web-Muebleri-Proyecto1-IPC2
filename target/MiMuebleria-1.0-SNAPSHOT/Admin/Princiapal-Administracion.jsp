@@ -27,13 +27,16 @@
                     </li>
                     <li class="nav-item">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-outline-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 Area Reportes
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" href="Controlador?menu=Reportes&accion=nada" target="myFrame">Reporte Venta</a></li>
                                 <li><a class="dropdown-item" href="Controlador?menu=RepoDev&accion=nada" target="myFrame">Reporte Devolucion</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="Controlador?menu=Rganancia&accion=nada" target="myFrame">Reporte Ganancias</a></li>                                
+                                <li><a class="dropdown-item" href="Controlador?menu=RVendedor&accion=nada" target="myFrame">Reporte Usuarios</a></li>                                
+                                <li><a class="dropdown-item" href="Controlador?menu=RMueble&accion=nada" target="myFrame">Mueble Mas Vendido</a></li>                                
+                                <li><a class="dropdown-item" href="Controlador?menu=RMuebleP&accion=nada" target="myFrame">Mueble menos Vendido </a></li>                                
                             </ul>
                         </div>
 
