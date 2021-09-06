@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class Conexion {
 
     public static String URL = "jdbc:mysql://localhost:3306/Muebleria";
-    public static String USER = "elvis-admin";
-    public static String PASS = "4056ELVIS";
+    public static String USER = "admin3";
+    public static String PASS = "admin3P";
     public static Connection conexion = null;
 
     public Conexion() {

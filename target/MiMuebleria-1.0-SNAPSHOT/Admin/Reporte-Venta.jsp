@@ -55,7 +55,7 @@
                 </table> 
             </div>
             <div class="card-body"> 
-                <form action="MuebleM" method="POST">
+                <form action="MuebleMasV" method="POST">
                     <input type="hidden" name="mueble" value="${mueble}">
                     <input type="submit" name="accion" value="Descargar" class="btn btn-danger">
                 </form>

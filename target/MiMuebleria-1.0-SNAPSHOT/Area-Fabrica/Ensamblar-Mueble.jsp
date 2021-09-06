@@ -101,7 +101,7 @@
                             <div class="form-group">
                                 <label>Cantidad Piezas</label>
                                 <br>
-                                <input type="number" name="cantidadP" class="from-control">
+                                <input type="number" name="cantidadP" class="from-control" required="number">
                             </div>
                             <input type="submit" name="accion" value="Confirmar" class="btn btn-info">
                         </form>
@@ -179,7 +179,7 @@
                             <div class="form-group">
                                 <label>ingrese su contraseña</label>
                                 <br>
-                                <input type="password" name="ensamblador" class="from-control">
+                                <input type="password" name="ensamblador" class="from-control" required="password">
                             </div>
                             <br>
                             <input type="submit" name="accion" value="Registrar" class="btn btn-info">

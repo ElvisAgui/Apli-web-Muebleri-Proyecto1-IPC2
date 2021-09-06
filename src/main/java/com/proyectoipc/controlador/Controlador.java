@@ -291,7 +291,7 @@ public class Controlador extends HttpServlet {
                         for (String string : lisRlarga) {
                             for (String string1 : idDevo) {
                                 if (string1.equals(string)) {
-                                    Venta vtn = rep.obtenerVenta(string);
+                                    Venta vtn = rep.obtenerVenta(string1);
                                     vtn.setFechaD(rep.fechaDv(string1));
                                     vtn.setPerdida(rep.perdidadDv(string1));
                                     listaV1.add(vtn);
@@ -335,31 +335,50 @@ public class Controlador extends HttpServlet {
                         break;
                     case "ganancia":
                         listaV1.clear();
+                        List<Venta> listaV = new ArrayList<>();
                         String fechaI = request.getParameter("fechaI");
                         String fechaF = request.getParameter("fechaF");
-                        ArrayList<String> lisRlarga = (ArrayList<String>) reporG.mejorVendedorG(fechaI, fechaF);
+                        ArrayList<String> lisRl = (ArrayList<String>) reporG.mejorVendedorG(fechaI, fechaF);
+                        ArrayList<String> lisRlarga = reporG.obtenerIDMueble(fechaI, fechaF, false);
                         for (String string : lisRlarga) {
                             Venta vtn = reporG.obtenerVenta(string);
-                            listaV1.add(vtn);
+                            listaV.add(vtn);
                         }
-                        request.setAttribute("total", reporG.obtenerTGanancia(fechaI, fechaF));
+                        for (Venta venta : listaV) {
+                            if (venta.getVendedor().equals(reporG.nombreV(lisRl.get(0)))) {
+                                listaV1.add(venta);
+                            }
+                        }
+                        request.setAttribute("usuario", reporG.nombreV(lisRl.get(0)));
+                        request.setAttribute("total", lisRl.get(1));
                         request.setAttribute("lista", listaV1);
                         break;
                 }
-                request.getRequestDispatcher("Admin/Reporte-Ganancia.jsp").forward(request, response);
+                request.getRequestDispatcher("Admin/Reporte-Genera-Mas-G.jsp").forward(request, response);
                 break;
             case "RVendedor":
-                 ReportesSQL reporV = new ReportesSQL();
-                switch(accion){
+                ReportesSQL reporV = new ReportesSQL();
+                switch (accion) {
                     case "nada":
                         request.setAttribute("hola", "hola");
                         break;
                     case "Vendedor":
-                         listaV1.clear();
+                        List<Venta> listaV = new ArrayList<>();
+                        listaV1.clear();
                         String fechaI = request.getParameter("fechaI");
                         String fechaF = request.getParameter("fechaF");
                         String usuario = reporV.mejorVendedor(fechaI, fechaF);
-                        listaV1 = reporV.listVentaMejorVendedor(usuario);
+                        ArrayList<String> lisRlarga = reporV.obtenerIDMueble(fechaI, fechaF, false);
+                        for (String string : lisRlarga) {
+                            Venta vtn = reporV.obtenerVenta(string);
+                            listaV.add(vtn);
+                        }
+                        for (Venta venta : listaV) {
+                            if (venta.getVendedor().equals(reporV.nombreV(usuario))) {
+                                listaV1.add(venta);
+                            }
+                        }
+
                         request.setAttribute("usuario", reporV.nombreV(usuario));
                         request.setAttribute("lista", listaV1);
                         break;
@@ -367,36 +386,56 @@ public class Controlador extends HttpServlet {
                 request.getRequestDispatcher("Admin/Reporte-Vendedor.jsp").forward(request, response);
                 break;
             case "RMueble":
-                 ReportesSQL reporM = new ReportesSQL();
-                switch(accion){
+                ReportesSQL reporM = new ReportesSQL();
+                switch (accion) {
                     case "nada":
                         request.setAttribute("hola", "hola");
                         break;
                     case "Mueble":
-                         listaV1.clear();
+                        listaV1.clear();
+                        List<Venta> listaV = new ArrayList<>();
                         String fechaI = request.getParameter("fechaI");
                         String fechaF = request.getParameter("fechaF");
                         String mueble = reporM.mejorMueble(fechaI, fechaF);
-                        listaV1 = reporM.listVentaMejorMueble(mueble);
-                        request.setAttribute("mueble", retrs.existeEnsamble(mueble));
+                        ArrayList<String> lisRlarga = reporM.obtenerIDMueble(fechaI, fechaF, false);
+                        for (String string : lisRlarga) {
+                            Venta vtn = reporM.obtenerVenta(string);
+                            listaV.add(vtn);
+                        }
+                        for (Venta venta : listaV) {
+                            if (venta.getNombreMueble().equals(mueble)) {
+                                listaV1.add(venta);
+                            }
+                        }
+                        request.setAttribute("mueble", mueble);
                         request.setAttribute("lista", listaV1);
                         break;
                 }
                 request.getRequestDispatcher("Admin/Reporte-Venta.jsp").forward(request, response);
                 break;
             case "RMuebleP":
-                 ReportesSQL reporP = new ReportesSQL();
-                switch(accion){
+                ReportesSQL reporP = new ReportesSQL();
+                switch (accion) {
                     case "nada":
                         request.setAttribute("hola", "hola");
                         break;
                     case "Mueble":
-                         listaV1.clear();
+                        listaV1.clear();
+                        List<Venta> listaV = new ArrayList<>();
                         String fechaI = request.getParameter("fechaI");
                         String fechaF = request.getParameter("fechaF");
                         String mueble = reporP.peorMueble(fechaI, fechaF);
-                        listaV1 = reporP.listVentaMejorMueble(mueble);
-                        request.setAttribute("mueble", retrs.existeEnsamble(mueble));
+                        ArrayList<String> lisRlarga = reporP.obtenerIDMueble(fechaI, fechaF, false);
+                         for (String string : lisRlarga) {
+                            Venta vtn = reporP.obtenerVenta(string);
+                            listaV.add(vtn);
+                        }
+                        for (Venta venta : listaV) {
+                            if (venta.getNombreMueble().equals(mueble)) {
+                                listaV1.add(venta);
+                            }
+                        }   
+                        request.setAttribute("mueble", mueble);
                         request.setAttribute("lista", listaV1);
                         break;
                 }

@@ -36,6 +36,10 @@
         <servlet-name>MenosV</servlet-name>
         <servlet-class>com.proyectoipc.controlador.MenosV</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GananciaUsuario</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.GananciaUsuario</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
         <url-pattern>/Controlador</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>MenosV</servlet-name>
         <url-pattern>/MenosV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GananciaUsuario</servlet-name>
+        <url-pattern>/GananciaUsuario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

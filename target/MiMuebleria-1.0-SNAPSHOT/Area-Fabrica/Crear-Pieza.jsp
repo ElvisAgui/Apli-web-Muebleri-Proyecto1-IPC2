@@ -24,17 +24,17 @@
                         <div class="form-group">
                             <label>Nombre</label>
                             <br>
-                            <input type="text" name="nombreN" class="from-control">
+                            <input type="text" name="nombreN" class="from-control" required="text">
                         </div>
                         <div class="form-group">
                             <label>Costo</label>
                             <br>
-                            <input type="text" name="costoN" class="from-control">
+                            <input type="text" name="costoN" class="from-control" required="text">
                         </div>
                         <div class="form-group">
                             <label>Cantidad</label>
                             <br>
-                            <input type="text" name="cantidadN" class="from-control">
+                            <input type="text" name="cantidadN" class="from-control" required="text">
                         </div>
                         <input type="submit" name="accion" value="Agregar" class="btn btn-info">
                     </form>
@@ -45,17 +45,17 @@
                         <div class="form-group">
                             <label>Nombre</label>
                             <br>
-                            <input type="text" value="${piezaA.getNombre()}" name="nombreE" class="from-control">
+                            <input type="text" value="${piezaA.getNombre()}" name="nombreE" class="from-control" required="text">
                         </div>
                         <div class="form-group">
                             <label>Costo</label>
                             <br>
-                            <input type="text" value="${piezaA.getCosto()}" name="costoE" class="from-control">
+                            <input type="text" value="${piezaA.getCosto()}" name="costoE" class="from-control" required="rext">
                         </div>
                         <div class="form-group">
                             <label>Cantidad</label>
                             <br>
-                            <input type="text"  value="${piezaA.getCantidad()}" name="cantidadE" class="from-control">
+                            <input type="text"  value="${piezaA.getCantidad()}" name="cantidadE" class="from-control" required="text">
                         </div>
                         <input type="submit" name="accion" value="Actualizar" class="btn btn-info">
                     </form>

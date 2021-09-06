@@ -1,6 +1,12 @@
 Mapeo fisico Base De Datos
 
 
+
+DCL---USUAIRO
+
+CREATE USER 'admin3'@'localhost' IDENTIFIED BY 'admin3P';
+GRANT ALL PRIVILEGES ON Muebleria.* TO 'admin3'@'localhost';
+
     ********Muebleria******
     
 CREATE DATABASE Muebleria;

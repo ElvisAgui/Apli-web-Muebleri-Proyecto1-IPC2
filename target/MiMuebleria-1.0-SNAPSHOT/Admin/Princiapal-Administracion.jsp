@@ -37,6 +37,7 @@
                                 <li><a class="dropdown-item" href="Controlador?menu=RVendedor&accion=nada" target="myFrame">Reporte Usuarios</a></li>                                
                                 <li><a class="dropdown-item" href="Controlador?menu=RMueble&accion=nada" target="myFrame">Mueble Mas Vendido</a></li>                                
                                 <li><a class="dropdown-item" href="Controlador?menu=RMuebleP&accion=nada" target="myFrame">Mueble menos Vendido </a></li>                                
+                                <li><a class="dropdown-item" href="Controlador?menu=RgananciaV&accion=nada" target="myFrame">Usuario Mas Ganancia </a></li>                                
                             </ul>
                         </div>
 

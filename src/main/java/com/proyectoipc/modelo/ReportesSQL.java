@@ -74,6 +74,14 @@ public class ReportesSQL {
         return lista;
 
     }
+    
+    
+    /**
+     * obtiene el id de la devolucion
+     * @param fechaI
+     * @param fechaF
+     * @return 
+     */
 
     public ArrayList<String> obtenerIDevu(String fechaI, String fechaF) {
         ArrayList<String> lista = new ArrayList<>();
@@ -111,6 +119,13 @@ public class ReportesSQL {
         return lista;
 
     }
+    
+    
+    /**
+     * obteiene las fecha de devolucion
+     * @param idM
+     * @return 
+     */
 
     public Date fechaDv(String idM) {
         Date fecha = null;
@@ -132,7 +147,13 @@ public class ReportesSQL {
 
         return fecha;
     }
-
+    
+    
+    /**
+     * calcula la perdida
+     * @param idM
+     * @return 
+     */
     public double perdidadDv(String idM) {
         double per = 0;
         try {
@@ -208,6 +229,7 @@ public class ReportesSQL {
             while (result.next()) {
                 vtn.setMueble_ensamblado(result.getString("mueble_ensamblado"));
                 vtn.setCliente(result.getString("cliente"));
+                vtn.setGanancia(result.getDouble("ganacia"));
                 vtn.setFecha(result.getDate("fecha"));
                 vtn.setCorrelativo(result.getString("correlativo"));
                 vtn.setNombreMueble(dbaux.existeEnsamble(vtn.getMueble_ensamblado()));
