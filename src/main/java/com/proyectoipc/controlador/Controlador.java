@@ -326,6 +326,28 @@ public class Controlador extends HttpServlet {
                 }
                 request.getRequestDispatcher("Admin/Reporte-Ganancia.jsp").forward(request, response);
                 break;
+            case "RgananciaV":
+                ReportesSQL reporG = new ReportesSQL();
+                switch (accion) {
+                    case "nada":
+                        String hola = "hola";
+                        request.setAttribute("hola", hola);
+                        break;
+                    case "ganancia":
+                        listaV1.clear();
+                        String fechaI = request.getParameter("fechaI");
+                        String fechaF = request.getParameter("fechaF");
+                        ArrayList<String> lisRlarga = (ArrayList<String>) reporG.mejorVendedorG(fechaI, fechaF);
+                        for (String string : lisRlarga) {
+                            Venta vtn = reporG.obtenerVenta(string);
+                            listaV1.add(vtn);
+                        }
+                        request.setAttribute("total", reporG.obtenerTGanancia(fechaI, fechaF));
+                        request.setAttribute("lista", listaV1);
+                        break;
+                }
+                request.getRequestDispatcher("Admin/Reporte-Ganancia.jsp").forward(request, response);
+                break;
             case "RVendedor":
                  ReportesSQL reporV = new ReportesSQL();
                 switch(accion){

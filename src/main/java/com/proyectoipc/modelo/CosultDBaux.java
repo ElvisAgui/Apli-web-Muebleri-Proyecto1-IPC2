@@ -66,7 +66,11 @@ public class CosultDBaux {
             System.out.println("actualizar costo Mueble");
         }
     }
-
+    
+    /**
+     * actualiza los campos del mueble ya ensamblado
+     * @param mueble 
+     */
     public void actualizarMueble(Mueble mueble) {
         try {
             String consulta = "UPDATE mueble SET costo=? WHERE nombre=?";
@@ -82,7 +86,12 @@ public class CosultDBaux {
         }
 
     }
-
+    
+    /**
+     * debulve un precio del que necesitamos
+     * @param nomPi
+     * @return 
+     */
     private double precioP(String nomPi) {
         double precio = 0;
         String consulta = "SELECT costo FROM pieza WHERE nombre=?";
@@ -101,7 +110,10 @@ public class CosultDBaux {
         }
         return precio;
     }
-
+    /**
+     * lista de muebles que hay que mostrar
+     * @return 
+     */
     public List mueble_Pieza() {
         List<Pieza_Muble> lista = new ArrayList<>();
         String consulta = "SELECT * FROM pieza_mueble";

@@ -50,7 +50,7 @@ public class VendedorV extends HttpServlet {
             directorio.mkdir();
         }
         EscritorArchivos escritor = new EscritorArchivos();
-        String pHat = escritor.EscArchivoUsuario((ArrayList<Venta>) Controlador.listaV1, path, request.getParameter("mueble"));
+        String pHat = escritor.EscArchivoUsuario((ArrayList<Venta>) Controlador.listaV1, path, request.getParameter("usuario"));
         try {
             BufferedInputStream file = new BufferedInputStream(new FileInputStream(pHat));
             response.setContentType("text/csv;charset=UTF-8");

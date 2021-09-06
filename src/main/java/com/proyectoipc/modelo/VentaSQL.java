@@ -47,7 +47,11 @@ public class VentaSQL {
 
         return nombre;
     }
-    
+        /**
+         * clacula la perdida del mueble ensamblado
+         * @param nombreMu
+         * @return 
+         */
       public double calcPerdida(String nombreMu) {
         double ganancia = 0;
         String consulta = "SELECT * FROM mueble WHERE nombre=?";

@@ -12,7 +12,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * @author elvis_agui
@@ -224,8 +223,8 @@ public class ReportesSQL {
 
         return vtn;
     }
-    
-    public List listVentaMejorVendedor(String contra){
+
+    public List listVentaMejorVendedor(String contra) {
         List<Venta> listaV = new ArrayList<>();
         try {
             String consulta = "SELECT * FROM venta WHERE vendedor=?";
@@ -249,11 +248,11 @@ public class ReportesSQL {
             System.out.println("error en obtener lista Venta " + ex.getMessage());
         } finally {
             cierre();
-        }        
+        }
         return listaV;
     }
-    
-    public List listVentaMejorMueble(String mueble){
+
+    public List listVentaMejorMueble(String mueble) {
         List<Venta> listaV = new ArrayList<>();
         try {
             String consulta = "SELECT * FROM venta WHERE nombre_mueble=?";
@@ -277,14 +276,12 @@ public class ReportesSQL {
             System.out.println("error en obtener lista Venta " + ex.getMessage());
         } finally {
             cierre();
-        }        
+        }
         return listaV;
     }
-    
-    
-    
-    public String nombreV(String contra){
-        String nombre= "";
+
+    public String nombreV(String contra) {
+        String nombre = "";
         try {
             String consulta = "SELECT nombre FROM usuario WHERE contraseña=?";
             conexion = Conexion.getConexion();
@@ -292,14 +289,14 @@ public class ReportesSQL {
             query.setString(1, contra);
             result = query.executeQuery();
             while (result.next()) {
-               nombre  = result.getString("nombre");
+                nombre = result.getString("nombre");
             }
 
         } catch (SQLException ex) {
             System.out.println("error en obtener Venta " + ex.getMessage());
         } finally {
             cierre();
-        }        
+        }
         return nombre;
     }
 
@@ -307,7 +304,7 @@ public class ReportesSQL {
         String vendedor = "";
         try {
             String consulta = "SELECT vendedor, COUNT( vendedor ) AS total FROM venta WHERE  fecha BETWEEN ? AND ? GROUP BY vendedor ORDER BY total DESC";
-            
+
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
             query.setDate(1, Ensamble.getFechaSF(fechaI));
@@ -325,8 +322,8 @@ public class ReportesSQL {
                 query = conexion.prepareStatement(consulta1);
                 result = query.executeQuery();
                 while (result.next()) {
-                   vendedor = result.getString("vendedor");
-                   break;
+                    vendedor = result.getString("vendedor");
+                    break;
                 }
             } catch (SQLException ex1) {
                 System.out.println("fjlasdfjasld");
@@ -339,14 +336,56 @@ public class ReportesSQL {
             setFechaI(null);
             cierre();
         }
-        
+
         return vendedor;
     }
+
+    public List<String> mejorVendedorG(String fechaI, String fechaF) {
+        List<String> listaV = new ArrayList<>();
+        try {
+            String consulta = "SELECT vendedor, SUM(ganacia) AS ganancia, count(vendedor) AS total FROM venta WHERE  fecha BETWEEN ? AND ? GROUP BY vendedor ORDER BY total DESC";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setDate(1, Ensamble.getFechaSF(fechaI));
+            query.setDate(2, Ensamble.getFechaSF(fechaF));
+            result = query.executeQuery();
+            while (result.next()) {
+                listaV.add(result.getString("vendedor"));
+                listaV.add(result.getString("ganancia"));
+                break;
+            }
+
+        } catch (ParseException ex) {
+            String consulta1 = "SELECT vendedor, SUM(ganacia) AS ganancia, count(vendedor) AS total FROM venta GROUP BY vendedor ORDER BY total DESC;";
+            try {
+                conexion = Conexion.getConexion();
+                query = conexion.prepareStatement(consulta1);
+                result = query.executeQuery();
+                while (result.next()) {
+                    listaV.add(result.getString("vendedor"));
+                    listaV.add(result.getString("ganancia"));
+                    break;
+                }
+            } catch (SQLException ex1) {
+                System.out.println("fjlasdfjasld");
+            }
+            System.out.println("error en formate");
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            setFechaF(null);
+            setFechaI(null);
+            cierre();
+        }
+
+        return listaV;
+    }
+
     public String mejorMueble(String fechaI, String fechaF) {
         String vendedor = "";
         try {
             String consulta = "SELECT nombre_mueble, COUNT( nombre_mueble ) AS total FROM venta WHERE  fecha BETWEEN ? AND ? GROUP BY nombre_mueble ORDER BY total DESC";
-            
+
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
             query.setDate(1, Ensamble.getFechaSF(fechaI));
@@ -364,8 +403,8 @@ public class ReportesSQL {
                 query = conexion.prepareStatement(consulta1);
                 result = query.executeQuery();
                 while (result.next()) {
-                   vendedor = result.getString("nombre_mueble");
-                   break;
+                    vendedor = result.getString("nombre_mueble");
+                    break;
                 }
             } catch (SQLException ex1) {
                 System.out.println("fjlasdfjasld");
@@ -378,14 +417,15 @@ public class ReportesSQL {
             setFechaI(null);
             cierre();
         }
-        
+
         return vendedor;
     }
+
     public String peorMueble(String fechaI, String fechaF) {
         String vendedor = "";
         try {
             String consulta = "SELECT nombre_mueble, COUNT( nombre_mueble ) AS total FROM venta WHERE  fecha BETWEEN ? AND ? GROUP BY nombre_mueble ORDER BY total ASC";
-            
+
             conexion = Conexion.getConexion();
             query = conexion.prepareStatement(consulta);
             query.setDate(1, Ensamble.getFechaSF(fechaI));
@@ -403,8 +443,8 @@ public class ReportesSQL {
                 query = conexion.prepareStatement(consulta1);
                 result = query.executeQuery();
                 while (result.next()) {
-                   vendedor = result.getString("nombre_mueble");
-                   break;
+                    vendedor = result.getString("nombre_mueble");
+                    break;
                 }
             } catch (SQLException ex1) {
                 System.out.println("fjlasdfjasld");
@@ -417,7 +457,7 @@ public class ReportesSQL {
             setFechaI(null);
             cierre();
         }
-        
+
         return vendedor;
     }
 
