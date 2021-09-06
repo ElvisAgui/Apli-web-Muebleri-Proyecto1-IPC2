@@ -16,7 +16,7 @@
     <body>
         <div class="d-flex"> 
             <div class="card-body" style="background-color:#20c997 ">
-                <h3 class="text-center">AREA DE REPORTES</h3>
+                <h3 class="text-center">REPORTES DE VENTA</h3>
             </div>
         </div>
         <div class="card-body" style="background-color:activecaption ">
@@ -25,37 +25,32 @@
                     <form action="Controlador?menu=Reportes" method="POST">
                         Fecha inicio <input class="btn btn-primary" type="date" name="fechaI">
                         Fecha final <input class="btn btn-primary" type="date" name="fechaF">
-                        <input type="submit" name="accion" value="Filtrar" class="btn btn-info">
+                        <input type="submit" name="accion" value="Venta" class="btn btn-info">
                     </form>
-                </div>
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <a class="btn btn-danger" href="Controlador?menu=Reportes&accion=RVenta">Ventas</a>
-                    <a class="btn btn-success" href="Controlador?menu=infoMueble&accion=ordenAsen">Devolucion</a>
-                    <a class="btn btn-danger" href="Controlador?menu=infoMueble&accion=ordenAsen">Ganancia</a>
-                    <a class="btn btn-success" href="Controlador?menu=infoMueble&accion=ordenAsen">Usuario Venta</a>
-                    <a class="btn btn-danger" href="Controlador?menu=infoMueble&accion=ordenDes">Usuario Ganancia</a>
-                    <a class="btn btn-success" href="Controlador?menu=infoMueble&accion=ordenDes">Mueble Mas Vendido</a>
-                    <a class="btn btn-danger" href="Controlador?menu=infoMueble&accion=ordenDes">Mueble Menos Vendido</a>
                 </div>
                 <br>
                 <br>
                 <c:forEach var="Corr" items="${correlativos}">
-                    <h2>${Corr}</h2>
+                    <h2>Venta ---->  ${Corr}</h2>
                     <table border="10" class="table table-success table-striped"> 
                         <thead>
                             <tr>
                                 <th>Fecha</th>
+                                <th>ID</th>
                                 <th>Producto</th>
                                 <th>Precio</th>
+                                <th>NIT cliente</th>
                             </tr>
                         </thead>
                         <tbody> 
-                            <c:forEach var="lista" items="${VentasR}">
-                                <c:if test="${lista.getCorrelativo() == Corr}">
+                            <c:forEach var="lista" items="${lista}">
+                                <c:if test="${Corr == lista.getCorrelativo()}">
                                     <tr>
                                         <td>${lista.getFecha()}</td>
                                         <td>${lista.getMueble_ensamblado()}</td>
-                                        <td>${lista.getGanancia()}</td>
+                                        <td>${lista.getNombreMueble()}</td>
+                                        <td>${lista.getPrecioV()}</td>
+                                        <td>${lista.getCliente()}</td>
                                     </tr>
                                 </c:if>
                             </c:forEach>
@@ -63,9 +58,12 @@
                     </table>
                 </c:forEach>
             </div>
+            <div class="card-body"> 
+                <form action="Descarga" method="POST">
+                    <input type="submit" name="accion" value="Descargar" class="btn btn-danger">
+                </form>
+            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
     </body>
 </html>

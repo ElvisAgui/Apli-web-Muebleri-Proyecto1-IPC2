@@ -176,12 +176,7 @@ public class CosultDBaux {
         return lista;
     }
 
-    public List piezasMueble(String nombre) {
-        String consulta = "SELECT * FROM pieza_mueble WHERE nombre_mueble=?";
-        List<Pieza_Muble> lista = new ArrayList<>();
-
-        return lista;
-    }
+  
 
     public void guardarEnsamble(Ensamble ensamble) {
         String consulta = "INSERT INTO ensamble(id, mueble, ensamblador, Fecha, ganancia, en_sala) VALUES (?,?,?,?,?,?)";

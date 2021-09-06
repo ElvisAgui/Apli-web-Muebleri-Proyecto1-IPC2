@@ -4,6 +4,7 @@ import com.proyectoipc.Entidades.Ensamble;
 import com.proyectoipc.Entidades.Venta;
 import com.proyectoipc.conexionSQL.Conexion;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,126 +19,206 @@ import java.util.List;
 public class ReportesSQL {
 //    SELECT * FROM ensamble WHERE Fecha BETWEEN '2018-04-21' AND '2019-04-21';
 //    SELECT DISTINCT mueble FROM ensamble;
-
+    private VentaSQL dbaux = new VentaSQL();
     private PreparedStatement query = null;
     private ResultSet result = null;
     private Connection conexion = null;
     private String fechaI;
     private String fechaF;
 
-    public List listaVenta(List<String> listaC) {
-        int cont=0;
-        List<Venta> lista = new ArrayList<>();
-        List<Venta> listaAux;
-        try {
-            while (cont<listaC.size()) { 
-                listaAux = getVenta(listaC.get(cont));
-                for (int i = 0; i < listaAux.size(); i++) {
-                    lista.add(listaAux.get(i));
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println("error en en la lista correlativasdlf " + ex.getMessage());
-        } finally {
-            cierre();
-        }
-
-        return lista;
-    }
-
-    public List getVenta(String correl) throws SQLException {
-        String consulta = "SELECT mueble_ensamblado, fecha FROM venta WHERE correlativo=?";
-        List<Venta> lista = new ArrayList<>();
-        conexion = Conexion.getConexion();
-        query = conexion.prepareStatement(consulta);
-        query.setString(1, correl);
-        result = query.executeQuery();
-        while (result.next()) {
-            Venta vtn = new Venta();
-            String nobre = nombreM(result.getString("mueble_ensamblado"));
-//            vtn.setFecha(result.getDate("fecha"));
-            vtn.setCorrelativo(correl);
-            vtn.setMueble_ensamblado(nobre);
-            vtn.setGanancia(precioV(nobre));
-            lista.add(vtn);
-        }
-        return lista;
-    }
-
-    public String nombreM(String id) {
-        String nombre = "";
-        try {
-            String consulta = "SELECT mueble FROM ensamble WHERE id=?";
-            conexion = Conexion.getConexion();
-            query = conexion.prepareStatement(consulta);
-            query.setString(1, id);
-            result = query.executeQuery();
-            while (result.next()) {
-                nombre = result.getString("mueble");
-            }
-        } catch (SQLException ex) {
-            System.out.println("error en muble " + ex.getMessage());
-        } 
-        return nombre;
-
-    }
-
-    public double precioV(String nombre) {
-        double precio = 0;
-        try {
-            String consulta = "SELECT precio_venta FROM mueble WHERE nombre=?";
-            conexion = Conexion.getConexion();
-            query = conexion.prepareStatement(consulta);
-            query.setString(1, nombre);
-            result = query.executeQuery();
-            while (result.next()) {
-                precio = result.getDouble("precio_venta");
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("error en buccar precioVenta " + ex.getMessage());
-        } 
-
-        return precio;
-    }
-
     /**
      * Realiza un lista de correlativos dependiendo la fecha o sin fecha
      *
      * @return llista de correlativos
      */
-    public ArrayList<String> obtenerCorrelativoVenta() {
+    public ArrayList<String> obtenerCorrelativoVenta(String fechaI, String fechaF, boolean Disct) {
         ArrayList<String> lista = new ArrayList<>();
         try {
-            if (fechaF != null && fechaI != null) {
-                String consulta = "SELECT DISTINCT correlativo FROM venta WHERE fecha BETWEEN ? AND ?";
-                conexion = Conexion.getConexion();
-                query = conexion.prepareStatement(consulta);
-                query.setDate(1, Ensamble.getFechaSF(fechaI));
-                query.setDate(2, Ensamble.getFechaSF(fechaF));
-                result = query.executeQuery();
-                while (result.next()) {
-                    lista.add(result.getString("correlativo"));
-                }
-            } else {
-                String consulta = "SELECT DISTINCT correlativo FROM venta";
-                conexion = Conexion.getConexion();
-                query = conexion.prepareStatement(consulta);
-                result = query.executeQuery();
-                while (result.next()) {
-                    lista.add(result.getString("correlativo"));
-                }
+            String consulta = "SELECT DISTINCT correlativo FROM venta WHERE fecha BETWEEN ? AND ?";
+            if (!Disct) {
+                consulta = "SELECT  correlativo FROM venta WHERE fecha BETWEEN ? AND ?";
             }
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setDate(1, Ensamble.getFechaSF(fechaI));
+            query.setDate(2, Ensamble.getFechaSF(fechaF));
+            result = query.executeQuery();
+            while (result.next()) {
+                lista.add(result.getString("correlativo"));
+            }
+
         } catch (ParseException ex) {
+            String consulta1 = "SELECT DISTINCT correlativo FROM venta";
+            if (!Disct) {
+                consulta1 = "SELECT  correlativo FROM venta";
+            }
+            try {
+                conexion = Conexion.getConexion();
+                query = conexion.prepareStatement(consulta1);
+                result = query.executeQuery();
+                while (result.next()) {
+                    lista.add(result.getString("correlativo"));
+                }
+            } catch (SQLException ex1) {
+                System.out.println("fjlasdfjasld");
+            }
             System.out.println("error en formate");
         } catch (SQLException e) {
             System.out.println("error en listar priductos");
         } finally {
             setFechaF(null);
             setFechaI(null);
+            cierre();
         }
         return lista;
 
+    }
+    public ArrayList<String> obtenerIDevu(String fechaI, String fechaF) {
+        ArrayList<String> lista = new ArrayList<>();
+        try {
+            String consulta = "SELECT DISTINCT mueble_vendido FROM devolucion WHERE fecha BETWEEN ? AND ?";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setDate(1, Ensamble.getFechaSF(fechaI));
+            query.setDate(2, Ensamble.getFechaSF(fechaF));
+            result = query.executeQuery();
+            while (result.next()) {
+                lista.add(result.getString("mueble_vendido"));
+            }
+
+        } catch (ParseException ex) {
+            String consulta1 = "SELECT DISTINCT mueble_vendido FROM devolucion";
+            try {
+                conexion = Conexion.getConexion();
+                query = conexion.prepareStatement(consulta1);
+                result = query.executeQuery();
+                while (result.next()) {
+                    lista.add(result.getString("mueble_vendido"));
+                }
+            } catch (SQLException ex1) {
+                System.out.println("fjlasdfjasld");
+            }
+            System.out.println("error en formate");
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            setFechaF(null);
+            setFechaI(null);
+            cierre();
+        }
+        return lista;
+
+    }
+    
+    public Date fechaDv(String idM){
+        Date fecha = null;
+        try {
+            String consulta = "SELECT fecha FROM devolucion WHERE mueble_vendido=?";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, idM);
+            result = query.executeQuery();
+            while (result.next()) {
+                fecha = result.getDate("fecha");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("error en fecha devolucion " + ex.getMessage());
+        } finally {
+            cierre();
+        }
+        
+        return fecha;
+    }
+    
+    public double perdidadDv(String idM){
+        double per = 0;
+        try {
+            String consulta = "SELECT pedida FROM devolucion WHERE mueble_vendido=?";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, idM);
+            result = query.executeQuery();
+            while (result.next()) {
+                per = result.getDouble("pedida");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("error en fecha devolucion " + ex.getMessage());
+        } finally {
+            cierre();
+        }
+        
+        return per;
+    }
+    
+    public ArrayList<String> obtenerIDMueble(String fechaI, String fechaF, boolean Disct) {
+        ArrayList<String> lista = new ArrayList<>();
+        try {
+            String consulta = "SELECT DISTINCT mueble_ensamblado FROM venta WHERE fecha BETWEEN ? AND ?";
+            if (!Disct) {
+                consulta = "SELECT  mueble_ensamblado FROM venta WHERE fecha BETWEEN ? AND ?";
+            }
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setDate(1, Ensamble.getFechaSF(fechaI));
+            query.setDate(2, Ensamble.getFechaSF(fechaF));
+            result = query.executeQuery();
+            while (result.next()) {
+                lista.add(result.getString("mueble_ensamblado"));
+            }
+
+        } catch (ParseException ex) {
+            String consulta1 = "SELECT DISTINCT mueble_ensamblado FROM venta";
+            if (!Disct) {
+                consulta1 = "SELECT  mueble_ensamblado FROM venta";
+            }
+            try {
+                conexion = Conexion.getConexion();
+                query = conexion.prepareStatement(consulta1);
+                result = query.executeQuery();
+                while (result.next()) {
+                    lista.add(result.getString("mueble_ensamblado"));
+                }
+            } catch (SQLException ex1) {
+                System.out.println("fjlasdfjasld");
+            }
+            System.out.println("error en formate");
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            setFechaF(null);
+            setFechaI(null);
+            cierre();
+        }
+        return lista;
+
+    }
+
+    public Venta obtenerVenta(String correlativo) {
+        Venta vtn = new Venta();
+        try {
+            String consulta = "SELECT * FROM venta WHERE mueble_ensamblado=?";
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, correlativo);
+            result = query.executeQuery();
+            while (result.next()) {
+                vtn.setMueble_ensamblado(result.getString("mueble_ensamblado"));
+                vtn.setCliente(result.getString("cliente"));
+                vtn.setFecha(result.getDate("fecha"));
+                vtn.setCorrelativo(result.getString("correlativo"));
+                vtn.setNombreMueble(dbaux.existeEnsamble(vtn.getMueble_ensamblado()));
+                vtn.setPrecioV(dbaux.precioV(vtn.getNombreMueble()));
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("error en obtener Venta " + ex.getMessage());
+        } finally {
+            cierre();
+        }
+
+        return vtn;
     }
 
     public String getFechaI() {

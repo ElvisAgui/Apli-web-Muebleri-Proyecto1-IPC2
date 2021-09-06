@@ -16,6 +16,8 @@ public class Venta {
     private String correlativo;
     private String nombreMueble;
     private double precioV;
+    private Date fechaD;
+    private double perdida;
 
     
     public Venta(){
@@ -93,6 +95,28 @@ public class Venta {
 
     public void setPrecioV(double precioV) {
         this.precioV = precioV;
+    }
+
+    public Date getFechaD() {
+        return fechaD;
+    }
+
+    public void setFechaD(Date fechaD) {
+        this.fechaD = fechaD;
+    }
+
+    public double getPerdida() {
+        return perdida;
+    }
+
+    public void setPerdida(double perdida) {
+        this.perdida = perdida;
+    }
+    
+
+    @Override
+    public String toString() {
+        return "Venta{" + "mueble_ensamblado=" + mueble_ensamblado + ", cliente=" + cliente + ", vendedor=" + vendedor + ", ganancia=" + ganancia + ", fecha=" + fecha + ", correlativo=" + correlativo + ", nombreMueble=" + nombreMueble + ", precioV=" + precioV + '}';
     }
     
     

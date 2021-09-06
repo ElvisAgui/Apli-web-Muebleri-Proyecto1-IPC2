@@ -26,7 +26,17 @@
                         <a class="btn btn-outline-light" href="Controlador?menu=Carga" target="myFrame">SubirArchivo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="Controlador?menu=Reportes&accion=nada" target="myFrame">Area de Reportes</a>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Area Reportes
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="Controlador?menu=Reportes&accion=nada" target="myFrame">Reporte Venta</a></li>
+                                <li><a class="dropdown-item" href="Controlador?menu=RepoDev&accion=nada" target="myFrame">Reporte Devolucion</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
+
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-light" href="Controlador?menu=Registro&accion=lisatSala" target="myFrame">En Venta</a>
@@ -50,8 +60,5 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
-
     </body>
 </html>

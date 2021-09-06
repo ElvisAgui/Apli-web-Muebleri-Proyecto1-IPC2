@@ -1,9 +1,11 @@
 package com.proyectoipc.modelo;
 
 import com.proyectoipc.Entidades.Cliente;
+import com.proyectoipc.Entidades.Devolucion;
 import com.proyectoipc.Entidades.Venta;
 import com.proyectoipc.conexionSQL.Conexion;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +47,78 @@ public class VentaSQL {
 
         return nombre;
     }
+    
+      public double calcPerdida(String nombreMu) {
+        double ganancia = 0;
+        String consulta = "SELECT * FROM mueble WHERE nombre=?";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, nombreMu);
+            result = query.executeQuery();
+            while (result.next()) {
+                ganancia = (result.getDouble("costo")/3);
+            }
+        } catch (SQLException e) {
+            System.out.println("error en listar priductos");
+        } finally {
+            cierre();
+        }
+        return ganancia;
 
+    }
+
+    public boolean comprovarFecha(String idMueble) {
+//        SELECT * FROM venta WHERE YEAR(CURDATE())-YEAR(fecha) < 0.0191781;
+        boolean cumple = false;
+        String consulta = "SELECT mueble_ensamblado FROM venta WHERE YEAR(CURDATE())-YEAR(fecha) < 0.0191781";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            result = query.executeQuery();
+            while (result.next()) {
+                if (result.getString("mueble_ensamblado").equals(idMueble)) {
+                    cumple=true;
+                    break;
+                }
+               
+            }
+        } catch (SQLException ex) {
+            System.out.println("error en bya vfecha vetnasdfasd");
+        } finally {
+            cierre();
+        }
+        return cumple;
+    }
+
+    public boolean muebleYaVendido(String idMueble, String correlativo) {
+        boolean yaVendido = false;
+        String consulta = "SELECT * FROM venta WHERE correlativo=?";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, correlativo);
+            result = query.executeQuery();
+            while (result.next()) {
+                if (result.getString("mueble_ensamblado").equals(idMueble)) {
+                    yaVendido = true;
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("error en bya vendido");
+        } finally {
+            cierre();
+        }
+        return yaVendido;
+    }
+
+    /**
+     * retorna el cliente correspondiente
+     *
+     * @param nit
+     * @return
+     */
     public Cliente clienteF(String nit) {
         Cliente cliente = new Cliente();
         String consulta = "SELECT * FROM cliente WHERE nit=?";
@@ -68,6 +141,13 @@ public class VentaSQL {
         return cliente;
     }
 
+    /**
+     * verifica si ya existe en la lista para vender
+     *
+     * @param nombre
+     * @param lista
+     * @return
+     */
     public boolean repetidoLista(String nombre, ArrayList<Venta> lista) {
         boolean rep = false;
         for (Venta venta : lista) {
@@ -79,6 +159,12 @@ public class VentaSQL {
         return rep;
     }
 
+    /**
+     * verificar si el mueble ya esta ensamblado
+     *
+     * @param id
+     * @return nombre del mueble
+     */
     public String existeEnsamble(String id) {
         String nombreMue = "no";
         String consulta = "SELECT mueble FROM ensamble WHERE id=?";
@@ -158,6 +244,24 @@ public class VentaSQL {
             query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("error en listar inser ventaE " + e.getMessage());
+        } finally {
+            cierre();
+        }
+    }
+    public void insertarDebolucion(Venta venta) {
+        String consulta = "INSERT INTO devolucion(mueble_vendido, cliente, recepcionista, pedida, fecha, correlativo) VALUES (?,?,?,?,?,?)";
+        try {
+            conexion = Conexion.getConexion();
+            query = conexion.prepareStatement(consulta);
+            query.setString(1, venta.getMueble_ensamblado());
+            query.setString(2, venta.getCliente());
+            query.setString(3, venta.getVendedor());
+            query.setDouble(4, venta.getGanancia());
+            query.setDate(5, venta.getFecha());
+            query.setString(6, venta.getCorrelativo());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("error en listar inser debo " + e.getMessage());
         } finally {
             cierre();
         }

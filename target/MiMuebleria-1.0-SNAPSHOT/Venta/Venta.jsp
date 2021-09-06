@@ -6,8 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import= "com.proyectoipc.modelo.VentaSQL" %> 
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,7 +14,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%VentaSQL aux= new VentaSQL();%>
         <div class="d-flex"> 
             <div class="col-sm-5">
                 <br>

@@ -2,11 +2,11 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>Controlador</servlet-name>
-        <servlet-class>com.proyectoipc.mimuebleria.Controlador</servlet-class>
+        <servlet-class>com.proyectoipc.controlador.Controlador</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Validar</servlet-name>
-        <servlet-class>com.proyectoipc.mimuebleria.Validar</servlet-class>
+        <servlet-class>com.proyectoipc.controlador.Validar</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>contFabricacion</servlet-name>
@@ -22,7 +22,19 @@
     </servlet>
     <servlet>
         <servlet-name>AdminControl</servlet-name>
-        <servlet-class>com.proyectoipc.mimuebleria.AdminControl</servlet-class>
+        <servlet-class>com.proyectoipc.controlador.AdminControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>descarga</servlet-name>
+        <servlet-class>com.proyectoipc.mimuebleria.descarga</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Descarga</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.Descarga</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Devolucion</servlet-name>
+        <servlet-class>com.proyectoipc.controlador.Devolucion</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
@@ -43,6 +55,14 @@
     <servlet-mapping>
         <servlet-name>AdminControl</servlet-name>
         <url-pattern>/AdminControl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Descarga</servlet-name>
+        <url-pattern>/Descarga</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Devolucion</servlet-name>
+        <url-pattern>/Devolucion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
